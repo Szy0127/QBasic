@@ -13,6 +13,7 @@ int main(int argc, char *argv[])
 {
     Program t1("t1.txt");
     t1.getTokens();
+    //t1.show();
     t1.getStatements();
     t1.exec();
 }

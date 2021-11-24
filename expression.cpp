@@ -1,5 +1,5 @@
 #include "expression.h"
-
+#include <cmath>
 Expression::Expression()
 {
 
@@ -54,6 +54,9 @@ int CompoundExp::eval(Evalstate *state) {
    if (op == "/") {
       //if (right == 0) error("Division by 0");
       return l / r;
+   }
+   if (op == "**"){
+       return pow(l,r);
    }
    //error("Illegal operator in expression");
    return 0;

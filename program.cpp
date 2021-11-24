@@ -23,8 +23,11 @@ void Program::getTokens()
 }
 void Program::show()
 {
-    std::cout<<1;
-    //lineNumber2statement[10]
+    for(auto &tokens:commands){
+        for(auto &token:tokens){
+            std::cout<<token<<std::endl;
+        }
+    }
 }
 
 void Program::getStatements()

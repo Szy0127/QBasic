@@ -42,7 +42,7 @@ Expression* Parser::token2Exp(Token tokens)
                 while(operators.top()!="("){//这里可能出现括号不匹配的情况
                     merge();
                 }
-                operands.pop();
+                operators.pop();
             }else{//其余操作符需要保持优先级严格单调增
                 while(!operators.empty() && precedence[operators.top()] >= precedence[token] ){
                     merge();
