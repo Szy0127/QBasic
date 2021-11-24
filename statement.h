@@ -87,4 +87,22 @@ public:
     virtual void exec(Evalstate *state)override;
 
 };
+class ENDsta:public Statement
+{
+
+public:
+    ENDsta();
+    virtual ~ENDsta();
+    virtual void exec(Evalstate *state)override;
+
+};
+class REMsta:public Statement
+{
+
+public:
+    REMsta();
+    virtual ~REMsta();
+    virtual void exec(Evalstate *state)override;
+
+};
 #endif // STATEMENT_H

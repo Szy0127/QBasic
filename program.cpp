@@ -61,6 +61,7 @@ void Program::getStatements()
             break;
         case GOTO:
             sta = new GOTOsta(stoi(line[2]));
+            break;
         case IF:{
             // n IF exp1 op exp2 THEN n1
             auto op = line.end();
@@ -76,6 +77,12 @@ void Program::getStatements()
             sta = new IFsta(*op,exp,exp1,stoi(*(line.end()-1)));
             break;
         }
+        case REM:
+            sta = new REMsta();
+            break;
+        case END:
+            sta = new ENDsta();
+            break;
         default:
             break;
             //error

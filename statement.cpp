@@ -42,7 +42,7 @@ Expression *PRINTsta::getExp()
 }
 void PRINTsta::exec(Evalstate *state)
 {
-    std::cout<<exp->eval(state);
+    std::cout<<exp->eval(state)<<std::endl;
     state->setNext();
 
 }
@@ -76,4 +76,17 @@ void IFsta::exec(Evalstate *state)
     }else{
         state->setNext();
     }
+}
+
+ENDsta::ENDsta(){}
+ENDsta::~ENDsta(){}
+void ENDsta::exec(Evalstate *state)
+{
+    state->setEnd();
+}
+REMsta::REMsta(){}
+REMsta::~REMsta(){}
+void REMsta::exec(Evalstate *state)
+{
+    state->setNext();
 }

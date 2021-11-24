@@ -35,3 +35,7 @@ void Evalstate::setNext()
         number = -1;
     }
 }
+void Evalstate::setEnd()
+{
+    number = -1;
+}
