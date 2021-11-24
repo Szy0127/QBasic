@@ -38,17 +38,21 @@ Expression* Parser::token2Exp(Token tokens)
 
     for(auto &token:tokens){
         if(validOperators.count(token)){//token是操作符
+            if(token=="("){
+                operators.push(token);
+                continue;
+            }
             if(token==")"){//遇到右括号 把左括号前的操作符全弹出
                 while(operators.top()!="("){//这里可能出现括号不匹配的情况
                     merge();
                 }
                 operators.pop();
-            }else{//其余操作符需要保持优先级严格单调增
-                while(!operators.empty() && precedence[operators.top()] >= precedence[token] ){
-                    merge();
-                }
-                operators.push(token);
+                continue;
             }
+            while(!operators.empty() && precedence[operators.top()] >= precedence[token] ){
+                merge();
+            }
+            operators.push(token);
         }else{//token是操作数
             Expression *exp = nullptr;
             if(isConstant(token)){
