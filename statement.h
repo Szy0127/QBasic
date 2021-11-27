@@ -56,8 +56,9 @@ class PRINTsta:public Statement
 {
 private:
     Expression *exp;
+    std::vector<std::string> *output;
 public:
-    PRINTsta(Expression *exp);
+    PRINTsta(Expression *exp,std::vector<std::string> *o);
     virtual ~PRINTsta();
 
     virtual Expression * getExp() override;

@@ -12,6 +12,7 @@ private:
     bool isDigit(char c);
 public:
     Tokenizer();
+    ~Tokenizer();
     Token string2tokens(std::string s);
 
 };

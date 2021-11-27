@@ -31,7 +31,7 @@ void GOTOsta::exec(Evalstate *state)
     state->setGoto(lineNumber);
 }
 
-PRINTsta::PRINTsta(Expression *exp):exp(exp){}
+PRINTsta::PRINTsta(Expression *exp,std::vector<std::string> *o):exp(exp),output(o){}
 PRINTsta::~PRINTsta()
 {
     delete exp;
@@ -42,7 +42,13 @@ Expression *PRINTsta::getExp()
 }
 void PRINTsta::exec(Evalstate *state)
 {
-    std::cout<<exp->eval(state)<<std::endl;
+    //std::cout<<exp->eval(state)<<std::endl;
+    int resInt = exp->eval(state);
+    std::stringstream ss;
+    ss<<resInt;
+    std::string resString;
+    ss>>resString;
+    output->push_back(resString);
     state->setNext();
 
 }

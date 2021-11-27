@@ -17,7 +17,7 @@ Parser::Parser()
     precedence["/"] = 3;
     precedence["**"] = 4;
 }
-
+Parser::~Parser(){}
 void Parser::merge()
 {
     std::string op = operators.top();

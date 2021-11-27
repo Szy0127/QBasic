@@ -17,6 +17,15 @@ Program::Program(std::string fileName)
     parser = new Parser;
     evalstate = nullptr;
 }
+//Program::~Program(){}
+//Program::~Program()
+//{
+//    std::cout<<123;
+//    delete tokenizer;
+//    delete parser;
+//    delete evalstate;
+//}
+
 void Program::getTokens()
 {
     for(auto &cmd:rawCommands){
@@ -57,7 +66,7 @@ void Program::getStatements()
 
         case PRINT:
             exp = parser->token2Exp(std::vector<std::string>(line.begin()+2,line.end()));
-            sta = new PRINTsta(exp);
+            sta = new PRINTsta(exp,&output);
             break;
         case GOTO:
             sta = new GOTOsta(stoi(line[2]));

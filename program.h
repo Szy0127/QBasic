@@ -20,10 +20,17 @@ class Program
     enum{INPUT=1796};
 public:
     Program(std::string fileName);
+    ~Program(){
+            //std::cout<<123;
+            delete tokenizer;
+            delete parser;
+            delete evalstate;
+    }
 
     std::vector<std::string> rawCommands; // 读入的原始代码 一行是一个string
     std::vector<Token> commands;  //每一行string转为若干个token构成的vector 包括行数 指令 标识符 操作符 常数
     std::map<int,Statement*> lineNumber2statement; // 行号对应的代码
+    std::vector<std::string> output;
 
 
     void show();

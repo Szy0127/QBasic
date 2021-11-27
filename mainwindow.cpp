@@ -1,11 +1,15 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
+#include <QFileDialog>
+#include <fstream>
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    connect(ui->btnLoadCode,&QPushButton::clicked,this,&MainWindow::LOAD);
+    connect(ui->btnRunCode,&QPushButton::clicked,this,&MainWindow::RUN);
+    connect(ui->btnClearCode,&QPushButton::clicked,this,&MainWindow::CLEAR);
 }
 
 MainWindow::~MainWindow()
@@ -19,4 +23,34 @@ void MainWindow::on_cmdLineEdit_editingFinished()
     ui->cmdLineEdit->setText("");
 
     ui->CodeDisplay->append(cmd);
+}
+
+void MainWindow::LOAD()
+{
+    QString filePath = QFileDialog::getOpenFileName(this,"选择代码文件");
+    if(filePath.isEmpty()){
+        return;
+    }
+    CLEAR();
+    std::ifstream f(filePath.toStdString());
+    std::string cmd;
+    while(getline(f,cmd)){
+        ui->CodeDisplay->append(QString::fromStdString(cmd));
+    }
+    program.reset(new Program(filePath.toStdString()));
+}
+void MainWindow::RUN()
+{
+    ui->textBrowser->clear();
+    program->getTokens();
+    program->getStatements();
+    program->exec();
+    for(auto &o:program->output){
+        ui->textBrowser->append(QString::fromStdString(o));
+    }
+}
+void MainWindow::CLEAR()
+{
+    ui->CodeDisplay->clear();
+    ui->textBrowser->clear();
 }

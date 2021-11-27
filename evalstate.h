@@ -7,6 +7,7 @@ class Evalstate
 {
 public:
     Evalstate(std::map<int,int> l,int begin);
+    ~Evalstate();
     int getValue(std::string name);
     void setValue(std::string name,int value);
     void setGoto(int n);//下一行执行标号为n的语句

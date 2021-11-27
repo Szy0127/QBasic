@@ -14,6 +14,7 @@ Tokenizer::Tokenizer()
     operators.insert("(");
     operators.insert(")");
 }
+Tokenizer::~Tokenizer(){}
 
 Token Tokenizer::string2tokens(std::string cmd)
 {

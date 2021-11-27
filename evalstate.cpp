@@ -4,7 +4,7 @@ Evalstate::Evalstate(std::map<int,int> l,int begin):nextLineNumber(l)
 {
     number = begin;
 }
-
+Evalstate::~Evalstate(){}
 int Evalstate::getValue(std::string name)
 {
     return name2value[name];

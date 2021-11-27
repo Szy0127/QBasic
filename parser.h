@@ -11,6 +11,7 @@ class Parser
 {
 public:
     Parser();
+    ~Parser();
     Expression* token2Exp(Token token);
 
 private:

@@ -1,5 +1,6 @@
 INPUT
 
+program析构会报multiple definition 很奇怪
 命令输入窗口作用： 回车结束
 1 指令
 RUN
