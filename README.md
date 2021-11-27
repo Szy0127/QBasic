@@ -1,11 +1,21 @@
 INPUT
 
-gui
+命令输入窗口作用： 回车结束
+1 指令
+RUN
+LOAD
+LIST
+CLEAR
+HELP
+QUIT
 
+2 行号 代码 加入到左上
+
+3  代码 直接执行
+
+gui
+读入
+执行
+清空
 语法树
 
-
-
-tokenizer 与 exp 没有考虑负数
-
-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

@@ -20,12 +20,21 @@ Parser::Parser()
 
 void Parser::merge()
 {
+    std::string op = operators.top();
+    operators.pop();
+    bool negative = false;
+    if(op == "-" && (operators.empty() || operators.top()=="(" )){
+        negative = true;
+    }
     Expression *right = operands.top();
     operands.pop();
-    Expression *left = operands.top();
-    operands.pop();
-    operands.push(new CompoundExp(operators.top(),left,right));
-    operators.pop();
+    Expression *left = nullptr;//表示负数的-是单目运算符
+    if(!negative){
+        left = operands.top();
+        operands.pop();
+    }
+    operands.push(new CompoundExp(op,left,right));
+    //operators.pop();
 }
 Expression* Parser::token2Exp(Token tokens)
 {

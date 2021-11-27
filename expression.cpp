@@ -45,7 +45,7 @@ std::string IdentifierExp::toString()
 }
 
 int CompoundExp::eval(Evalstate *state) {
-   int l = left->eval(state);
+   int l = left?left->eval(state):0;
    int r = right->eval(state);
 
    if (op == "+") return l + r;
