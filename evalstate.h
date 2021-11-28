@@ -6,7 +6,7 @@
 class Evalstate
 {
 public:
-    Evalstate(std::map<int,int> l,int begin);
+    Evalstate();
     ~Evalstate();
     int getValue(std::string name);
     void setValue(std::string name,int value);
@@ -14,10 +14,10 @@ public:
     void setNext();//顺序执行下一行
     void setEnd();
     int getNextLineNumber();
+    void reset();
 private:
     std::map<std::string,int> name2value;
     int number;
-    std::map<int,int> nextLineNumber;
 
 };
 

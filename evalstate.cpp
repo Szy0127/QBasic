@@ -1,8 +1,8 @@
 #include "evalstate.h"
 
-Evalstate::Evalstate(std::map<int,int> l,int begin):nextLineNumber(l)
+Evalstate::Evalstate()
 {
-    number = begin;
+    number = -1;
 }
 Evalstate::~Evalstate(){}
 int Evalstate::getValue(std::string name)
@@ -17,10 +17,10 @@ void Evalstate::setValue(std::string name, int value)
 
 void Evalstate::setGoto(int n)
 {
-    if(!nextLineNumber.count(number)){
-        //error;
-        return ;
-    }
+//    if(!nextLineNumber.count(number)){
+//        //error;
+//        return ;
+//    }
     number = n;
 }
 int Evalstate::getNextLineNumber()
@@ -29,13 +29,15 @@ int Evalstate::getNextLineNumber()
 }
 void Evalstate::setNext()
 {
-    if(nextLineNumber.count(number)){
-        number = nextLineNumber[number];
-    }else{
-        number = -1;
-    }
+    number = -1;
 }
 void Evalstate::setEnd()
 {
+    number = -2;
+}
+
+void Evalstate::reset()
+{
     number = -1;
+    name2value.clear();
 }

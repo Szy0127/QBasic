@@ -7,15 +7,28 @@ Program::Program(std::string fileName)
 {
     std::ifstream f(fileName);
     std::string s;
+    std::string tmp;
+    //这里存代码的时候需要把最前面的行号作为map的键 后面的所有字符作为一个整体的字符串 方便在gui上输出
+    std::stringstream ss;
+    int n;
     while(getline(f,s)){
-        rawCommands.push_back(s);
+        ss.clear();
+        ss<<s;
+        ss>>n;
+        s.clear();
+        while(ss>>tmp){
+            s += tmp;
+            s += " ";
+        }
+        s.pop_back();//最后一个空格没必要
+        rawCommands[n] = s;
     }
     validCompareOperators.insert("<");
     validCompareOperators.insert("=");
     validCompareOperators.insert(">");
     tokenizer = new Tokenizer;
     parser = new Parser;
-    evalstate = nullptr;
+    evalstate = new Evalstate;
 }
 //Program::~Program(){}
 //Program::~Program()
@@ -29,17 +42,10 @@ Program::Program(std::string fileName)
 void Program::getTokens()
 {
     for(auto &cmd:rawCommands){
-        commands.push_back(tokenizer->string2tokens(cmd));
+        commands[cmd.first]= tokenizer->string2tokens(cmd.second);
     }
 }
-void Program::show()
-{
-    for(auto &tokens:commands){
-        for(auto &token:tokens){
-            std::cout<<token<<std::endl;
-        }
-    }
-}
+
 
 void Program::getStatements()
 {
@@ -50,26 +56,24 @@ void Program::getStatements()
     Expression *exp1 = nullptr;
     Statement *sta = nullptr;
 
-    int beginNum = INT_MAX;
-    for(auto &line:commands){
-        int num = stoi(line[0]);
-        lineNumber.push_back(num);//不考虑相等
-        if(num <= beginNum){
-            beginNum = num;
-        }
-        int hashKey = hash(line[1]);
+    for(auto &cmd:commands){
+        int num = cmd.first;
+        Token line(cmd.second);
+        //lineNumber.push_back(num);//不考虑相等
+
+        int hashKey = hash(line[0]);
         switch (hashKey) {
         case LET:
-            exp = parser->token2Exp(std::vector<std::string>(line.begin()+4,line.end()));
-            sta = new LETsta(line[2],exp);
+            exp = parser->token2Exp(std::vector<std::string>(line.begin()+3,line.end()));
+            sta = new LETsta(line[1],exp);
             break;
 
         case PRINT:
-            exp = parser->token2Exp(std::vector<std::string>(line.begin()+2,line.end()));
+            exp = parser->token2Exp(std::vector<std::string>(line.begin()+1,line.end()));
             sta = new PRINTsta(exp,&output);
             break;
         case GOTO:
-            sta = new GOTOsta(stoi(line[2]));
+            sta = new GOTOsta(stoi(line[1]));
             break;
         case IF:{
             // n IF exp1 op exp2 THEN n1
@@ -81,7 +85,7 @@ void Program::getStatements()
                 op = find(line.begin(),line.end(),validOp);
             }
 
-            exp = parser->token2Exp(std::vector<std::string>(line.begin()+2,op));
+            exp = parser->token2Exp(std::vector<std::string>(line.begin()+1,op));
             exp1 = parser->token2Exp(std::vector<std::string>(op+1,line.end()-2));
             sta = new IFsta(*op,exp,exp1,stoi(*(line.end()-1)));
             break;
@@ -97,16 +101,15 @@ void Program::getStatements()
             //error
         }
 
-        lineNumber2statement[num] = sta;
+        statements[num] = sta;
     }
-    sort(lineNumber.begin(),lineNumber.end());
-    if(lineNumber.size()==0)return; // vector.size是unsigned long long 这里只需要n-1次 避免=0时-1=0xffffffffffffffff>0
-    for(unsigned long long i = 0 ; i < lineNumber.size()-1 ; i++){
-        nextLineNumber[lineNumber[i]] = lineNumber[i+1];
-    }
-    //nextLineNumber[lineNumber[lineNumber.size()-1]] = -1;
+    //sort(lineNumber.begin(),lineNumber.end());
+//    if(lineNumber.size()==0)return; // vector.size是unsigned long long 这里只需要n-1次 避免=0时-1=0xffffffffffffffff>0
+//    for(unsigned long long i = 0 ; i < lineNumber.size()-1 ; i++){
+//        nextLineNumber[lineNumber[i]] = lineNumber[i+1];
+//    }
+//    //nextLineNumber[lineNumber[lineNumber.size()-1]] = -1;
 
-    evalstate = new Evalstate(nextLineNumber,beginNum);
 }
 
 int Program::stoi(std::string s)
@@ -118,12 +121,31 @@ int Program::stoi(std::string s)
 }
 void Program::exec()
 {
-    while(evalstate->getNextLineNumber()!=-1){
-        //std::cout<<evalstate->getNextLineNumber()<<std::endl;
-        Statement *sta = lineNumber2statement[evalstate->getNextLineNumber()];
+    evalstate->reset();
+    Statement *sta = nullptr;
+    int next;
+    auto iter = statements.begin();
+    while(iter!=statements.end()){
+        sta = iter->second;
         sta->exec(evalstate);
-
+        next = evalstate->getNextLineNumber();
+        switch (next) {
+        case -2:
+            iter = statements.end();
+            break;
+        case -1:
+            iter++;
+            break;
+        default:
+            iter = statements.find(next);
+        }
     }
+//    while(evalstate->getNextLineNumber()!=-1){
+//        //std::cout<<evalstate->getNextLineNumber()<<std::endl;
+//        Statement *sta = lineNumber2statement[evalstate->getNextLineNumber()];
+//        sta->exec(evalstate);
+
+//    }
 }
 
 int Program::hash(std::string s)

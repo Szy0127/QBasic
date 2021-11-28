@@ -17,6 +17,8 @@ public:
 
 private slots:
     void on_cmdLineEdit_editingFinished();
+private:
+
     void LOAD();
     void RUN();
     void CLEAR();

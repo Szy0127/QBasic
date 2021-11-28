@@ -31,6 +31,7 @@ void MainWindow::LOAD()
     if(filePath.isEmpty()){
         return;
     }
+    //QString filePath = QString::fromStdString("t1.txt");
     CLEAR();
     std::ifstream f(filePath.toStdString());
     std::string cmd;

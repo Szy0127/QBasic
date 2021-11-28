@@ -27,16 +27,16 @@ public:
             delete evalstate;
     }
 
-    std::vector<std::string> rawCommands; // 读入的原始代码 一行是一个string
-    std::vector<Token> commands;  //每一行string转为若干个token构成的vector 包括行数 指令 标识符 操作符 常数
-    std::map<int,Statement*> lineNumber2statement; // 行号对应的代码
+    std::map<int,std::string> rawCommands; // 除了行号 都不处理 方便gui打印
+    std::map<int,Token> commands;  //每一行string转为若干个token构成的vector 包括行数 指令 标识符 操作符 常数
+    std::map<int,Statement*> statements; // 行号对应的代码
     std::vector<std::string> output;
 
 
-    void show();
     void getTokens();
     void getStatements();
     void exec();
+    void appendCMD(int lineNumber,std::string cmd);
 private:
     int stoi(std::string s);
     int hash(std::string s);
