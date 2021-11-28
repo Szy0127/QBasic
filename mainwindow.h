@@ -22,6 +22,8 @@ private:
     void LOAD();
     void RUN();
     void CLEAR();
+    void showCode();
+    void showOutput();
 
 private:
     Ui::MainWindow *ui;

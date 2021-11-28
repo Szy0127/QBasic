@@ -3,6 +3,7 @@
 
 #include<iostream>
 #include<map>
+#include<vector>
 class Evalstate
 {
 public:
@@ -15,9 +16,12 @@ public:
     void setEnd();
     int getNextLineNumber();
     void reset();
+    void print(std::string s);
+    std::vector<std::string> getOutput();
 private:
     std::map<std::string,int> name2value;
     int number;
+    std::vector<std::string> output;
 
 };
 

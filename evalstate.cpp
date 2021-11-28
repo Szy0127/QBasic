@@ -37,4 +37,13 @@ void Evalstate::reset()
 {
     number = -1;
     name2value.clear();
+    output.clear();
+}
+void Evalstate::print(std::string s)
+{
+    output.push_back(s);
+}
+std::vector<std::string> Evalstate::getOutput()
+{
+    return output;
 }

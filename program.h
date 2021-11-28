@@ -27,18 +27,20 @@ public:
             delete evalstate;
     }
 
+    static int stoi(std::string s);
     std::map<int,std::string> rawCommands; // 除了行号 都不处理 方便gui打印
     std::map<int,Token> commands;  //每一行string转为若干个token构成的vector 包括行数 指令 标识符 操作符 常数
     std::map<int,Statement*> statements; // 行号对应的代码
-    std::vector<std::string> output;
-
 
     void getTokens();
     void getStatements();
+    Statement *getOneStatements(Token token);
     void exec();
+    void execOne(std::string cmd);
     void appendCMD(int lineNumber,std::string cmd);
+
+    std::vector<std::string> getOutput();
 private:
-    int stoi(std::string s);
     int hash(std::string s);
 
     std::set<std::string> validCompareOperators;
