@@ -21,7 +21,6 @@ class Program
 public:
     Program(std::string fileName);
     ~Program(){
-            //std::cout<<123;
             delete tokenizer;
             delete parser;
             delete evalstate;

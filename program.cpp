@@ -101,10 +101,6 @@ Statement *Program::getOneStatements(Token token)
 void Program::getStatements()
 {
     statements.clear();
-    std::map<int,int> nextLineNumber; // 此行下一行执行的行号
-    std::vector<int> lineNumber; // 行号集合 用于排序
-
-
     for(auto &cmd:commands){
         int num = cmd.first;
         Token line(cmd.second);

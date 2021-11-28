@@ -57,11 +57,11 @@ void MainWindow::on_cmdLineEdit_editingFinished()
 
 void MainWindow::LOAD()
 {
-//    QString filePath = QFileDialog::getOpenFileName(this,"选择代码文件");
-//    if(filePath.isEmpty()){
-//        return;
-//    }
-    QString filePath = QString::fromStdString("t2.txt");
+    QString filePath = QFileDialog::getOpenFileName(this,"选择代码文件");
+    if(filePath.isEmpty()){
+        return;
+    }
+    //QString filePath = QString::fromStdString("t2.txt");
     CLEAR();
     program.reset(new Program(filePath.toStdString()));
     showCode();
