@@ -33,12 +33,10 @@ void MainWindow::LOAD()
     }
     //QString filePath = QString::fromStdString("t1.txt");
     CLEAR();
-    std::ifstream f(filePath.toStdString());
-    std::string cmd;
-    while(getline(f,cmd)){
-        ui->CodeDisplay->append(QString::fromStdString(cmd));
-    }
     program.reset(new Program(filePath.toStdString()));
+    for(auto &cmd:program->rawCommands){
+        ui->CodeDisplay->append(QString::number(cmd.first)+" "+QString::fromStdString(cmd.second));
+    }
 }
 void MainWindow::RUN()
 {

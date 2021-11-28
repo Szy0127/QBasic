@@ -17,10 +17,7 @@ void Evalstate::setValue(std::string name, int value)
 
 void Evalstate::setGoto(int n)
 {
-//    if(!nextLineNumber.count(number)){
-//        //error;
-//        return ;
-//    }
+
     number = n;
 }
 int Evalstate::getNextLineNumber()

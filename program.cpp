@@ -30,7 +30,7 @@ Program::Program(std::string fileName)
     parser = new Parser;
     evalstate = new Evalstate;
 }
-//Program::~Program(){}
+
 //Program::~Program()
 //{
 //    std::cout<<123;
@@ -59,7 +59,6 @@ void Program::getStatements()
     for(auto &cmd:commands){
         int num = cmd.first;
         Token line(cmd.second);
-        //lineNumber.push_back(num);//不考虑相等
 
         int hashKey = hash(line[0]);
         switch (hashKey) {
@@ -103,13 +102,6 @@ void Program::getStatements()
 
         statements[num] = sta;
     }
-    //sort(lineNumber.begin(),lineNumber.end());
-//    if(lineNumber.size()==0)return; // vector.size是unsigned long long 这里只需要n-1次 避免=0时-1=0xffffffffffffffff>0
-//    for(unsigned long long i = 0 ; i < lineNumber.size()-1 ; i++){
-//        nextLineNumber[lineNumber[i]] = lineNumber[i+1];
-//    }
-//    //nextLineNumber[lineNumber[lineNumber.size()-1]] = -1;
-
 }
 
 int Program::stoi(std::string s)
@@ -140,12 +132,6 @@ void Program::exec()
             iter = statements.find(next);
         }
     }
-//    while(evalstate->getNextLineNumber()!=-1){
-//        //std::cout<<evalstate->getNextLineNumber()<<std::endl;
-//        Statement *sta = lineNumber2statement[evalstate->getNextLineNumber()];
-//        sta->exec(evalstate);
-
-//    }
 }
 
 int Program::hash(std::string s)
