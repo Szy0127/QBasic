@@ -61,7 +61,7 @@ void MainWindow::LOAD()
 //    if(filePath.isEmpty()){
 //        return;
 //    }
-    QString filePath = QString::fromStdString("t3.txt");
+    QString filePath = QString::fromStdString("t2.txt");
     CLEAR();
     program.reset(new Program(filePath.toStdString()));
     showCode();

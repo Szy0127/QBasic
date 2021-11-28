@@ -22,12 +22,13 @@ void Parser::merge()
 {
     std::string op = operators.top();
     operators.pop();
-    bool negative = false;
-    if(op == "-" && (operands.empty() || operators.top()=="(" )){
-        negative = true;
-    }
     Expression *right = operands.top();
     operands.pop();
+    bool negative = false;
+    if(op == "-" && (operands.empty() || (!operators.empty() && operators.top()=="(" ))){
+        negative = true;
+    }
+
     Expression *left = nullptr;//表示负数的-是单目运算符
     if(!negative){
         left = operands.top();
