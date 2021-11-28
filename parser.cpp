@@ -23,7 +23,7 @@ void Parser::merge()
     std::string op = operators.top();
     operators.pop();
     bool negative = false;
-    if(op == "-" && (operators.empty() || operators.top()=="(" )){
+    if(op == "-" && (operands.empty() || operators.top()=="(" )){
         negative = true;
     }
     Expression *right = operands.top();
