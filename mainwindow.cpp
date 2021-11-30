@@ -28,31 +28,18 @@ void MainWindow::on_cmdLineEdit_editingFinished()
     }
     std::string c = cmd.toStdString();
     std::stringstream ss(c);
-    c.clear();
-    std::string first;
-    ss>>first;
-    int n = Program::stoi(first);
-    std::string tmp;
-    bool run = false;
-    if(n == 0 && first!="0"){//不带行号 直接执行
-        c += first;
-        c += " ";
-        run = true;
-    }
-    while(ss>>tmp){
-        c += tmp;
-        c += " ";
-    }
-    c.pop_back();//最后一个空格没必要
-    if(!run){
+    int n = ss.peek();
+    std::string num;
+    if(n >= '0' && n <= '9'){
+        ss>>num;
+        n = Program::stoi(num);
+        getline(ss,c);
         program->appendCMD(n,c);
         showCode();
     }else{
         program->execOne(c);
         showOutput();
     }
-
-
 }
 
 void MainWindow::LOAD()

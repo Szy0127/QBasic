@@ -15,12 +15,7 @@ Program::Program(std::string fileName)
         ss.clear();
         ss<<s;
         ss>>n;
-        s.clear();
-        while(ss>>tmp){
-            s += tmp;
-            s += " ";
-        }
-        s.pop_back();//最后一个空格没必要
+        getline(ss,s);
         rawCommands[n] = s;
     }
     validCompareOperators.insert("<");
