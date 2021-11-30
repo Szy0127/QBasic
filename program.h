@@ -7,7 +7,10 @@
 #include<statement.h>
 #include<expression.h>
 #include<parser.h>
+namespace SZYQBasic{
 typedef std::vector<std::string> Token ;
+static std::set<std::string> validCommand{"LET","IF","REM","END","GOTO","PRINT","INPUT"};
+static std::set<std::string> validCompareOperators{"=","<",">"};
 class Program
 {
     enum{e=65537};
@@ -42,11 +45,10 @@ public:
 private:
     int hash(std::string s);
 
-    std::set<std::string> validCompareOperators;
 
     Tokenizer *tokenizer;
     Parser *parser;
     Evalstate *evalstate;
 };
-
+}
 #endif // PROGRAM_H

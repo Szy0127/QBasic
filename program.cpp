@@ -3,6 +3,7 @@
 #include<fstream>
 #include<sstream>
 #include<algorithm>
+using namespace SZYQBasic;
 Program::Program(std::string fileName)
 {
     std::ifstream f(fileName);
@@ -18,9 +19,7 @@ Program::Program(std::string fileName)
         getline(ss,s);
         rawCommands[n] = s;
     }
-    validCompareOperators.insert("<");
-    validCompareOperators.insert("=");
-    validCompareOperators.insert(">");
+
     tokenizer = new Tokenizer;
     parser = new Parser;
     evalstate = new Evalstate;

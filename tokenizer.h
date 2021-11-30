@@ -6,9 +6,9 @@
 typedef std::vector<std::string> Token ;
 class Tokenizer
 {
+    std::set<std::string> operators={"+","-","*","/","**","=","<",">","(",")"};
 private:
     Token tokens;
-    std::set<std::string> operators;
     bool isDigit(char c);
 public:
     Tokenizer();

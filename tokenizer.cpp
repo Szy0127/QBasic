@@ -3,16 +3,7 @@
 
 Tokenizer::Tokenizer()
 {
-    operators.insert("+");
-    operators.insert("-");
-    operators.insert("*");
-    operators.insert("/");
-    operators.insert("**");
-    operators.insert("=");
-    operators.insert("<");
-    operators.insert(">");
-    operators.insert("(");
-    operators.insert(")");
+
 }
 Tokenizer::~Tokenizer(){}
 
