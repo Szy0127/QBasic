@@ -17,7 +17,11 @@ Program::Program(std::string fileName)
         ss<<s;
         ss>>n;
         getline(ss,s);
+        if(rawCommands.count(n) && s.empty()){
+            removeCmd(n);
+        }else{
         rawCommands[n] = s;
+        }
     }
 
     tokenizer = new Tokenizer;
@@ -102,6 +106,15 @@ void Program::getStatements()
         statements[num] = sta;
     }
 }
+void Program::removeCmd(int n)
+{
+    for(auto iter = rawCommands.begin();iter!=rawCommands.end();iter++){
+        if(iter->first == n){
+            rawCommands.erase(iter);
+            break;
+        }
+    }
+}
 
 int Program::stoi(std::string s)
 {
@@ -153,7 +166,11 @@ int Program::hash(std::string s)
 
 void Program::appendCMD(int lineNumber, std::string cmd)
 {
-    rawCommands[lineNumber] = cmd;
+    if(rawCommands.count(lineNumber) && cmd.empty()){
+        removeCmd(lineNumber);
+    }else{
+        rawCommands[lineNumber] = cmd;
+    }
 }
 
 std::vector<std::string> Program::getOutput()

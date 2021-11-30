@@ -37,6 +37,7 @@ void MainWindow::on_cmdLineEdit_editingFinished()
         }
         ss>>num;
         n = SZYQBasic::Program::stoi(num);
+        c.clear();
         getline(ss,c);
         program->appendCMD(n,c);
         showCode();
@@ -75,10 +76,12 @@ void MainWindow::on_cmdLineEdit_editingFinished()
 
 void MainWindow::LOAD()
 {
+
     QString filePath = QFileDialog::getOpenFileName(this,"选择代码文件");
     if(filePath.isEmpty()){
         return;
     }
+
     //QString filePath = QString::fromStdString("t2.txt");
     CLEAR();
     program.reset(new SZYQBasic::Program(filePath.toStdString()));

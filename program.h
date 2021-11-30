@@ -44,7 +44,7 @@ public:
     std::vector<std::string> getOutput();
 private:
     int hash(std::string s);
-
+    void removeCmd(int n);
 
     Tokenizer *tokenizer;
     Parser *parser;
