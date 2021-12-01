@@ -83,7 +83,7 @@ void MainWindow::LOAD()
         return;
     }
 
-    //QString filePath = QString::fromStdString("t2.txt");
+    //QString filePath = QString::fromStdString("t3.txt");
     CLEAR();
     program.reset(new SZYQBasic::Program(filePath.toStdString()));
     showCode();

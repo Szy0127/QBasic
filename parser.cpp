@@ -25,17 +25,17 @@ void Parser::merge()
     Expression *right = operands.top();
     operands.pop();
     bool negative = false;
-    if(op == "-" && (operands.empty() || (!operators.empty() && operators.top()=="(" ))){
-        negative = true;
+    if(op == "-"){
+        negative = isNegative.top();
+        isNegative.pop();
     }
-
     Expression *left = nullptr;//表示负数的-是单目运算符
     if(!negative){
         left = operands.top();
         operands.pop();
     }
+
     operands.push(new CompoundExp(op,left,right));
-    //operators.pop();
 }
 Expression* Parser::token2Exp(Token tokens)
 {
@@ -45,11 +45,12 @@ Expression* Parser::token2Exp(Token tokens)
     while(!operators.empty()){
         operands.pop();
     }
-
+    isFirst = true;
     for(auto &token:tokens){
         if(validOperators.count(token)){//token是操作符
             if(token=="("){
                 operators.push(token);
+                isFirst = true;
                 continue;
             }
             if(token==")"){//遇到右括号 把左括号前的操作符全弹出
@@ -63,7 +64,16 @@ Expression* Parser::token2Exp(Token tokens)
                 merge();
             }
             operators.push(token);
+            if(token == "-"){
+                if(isFirst){
+                    isNegative.push(true);
+                }else{
+                    isNegative.push(false);
+                }
+            }
+            isFirst = false;
         }else{//token是操作数
+            isFirst = false;
             Expression *exp = nullptr;
             if(isConstant(token)){
                 exp = new ConstantExp(getConstant(token));
