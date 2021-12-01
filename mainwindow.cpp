@@ -32,12 +32,16 @@ void MainWindow::on_cmdLineEdit_editingFinished()
     std::stringstream ss(c);
     int n = ss.peek();
     std::string num;
-    if(n >= '0' && n <= '9'){//1 带行号 插入的代码
+    if((n >= '0' && n <= '9') || n == '-'){//1 带行号 插入的代码  因为input的输入也是数字 所以正好一起判断了  但是input的数字可能是负数
         if(!program){
             return;//error
         }
         ss>>num;
         n = SZYQBasic::Program::stoi(num);
+        if(program->isSuspended()){
+            input(n);
+            return;
+        }
         c.clear();
         getline(ss,c);
         program->appendCMD(n,c);
@@ -88,6 +92,11 @@ void MainWindow::LOAD()
     program.reset(new SZYQBasic::Program(filePath.toStdString()));
     showCode();
 }
+void MainWindow::input(int n)
+{
+    program->continueExec(n);
+    showOutput();
+}
 void MainWindow::RUN()
 {
     ui->textBrowser->clear();
@@ -95,6 +104,8 @@ void MainWindow::RUN()
         QMessageBox::warning(this, "错误", "请先加载程序");
         return;
     }
+    //这里run是开始了程序 但是遇到input时控制会返回 所以exec结束 showOutput
+    //但是这是应该是等待用户输入 应当开启下一轮的exec 因此在调用input后仍需showOutput
     program->exec();
     showOutput();
 }

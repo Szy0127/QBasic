@@ -16,11 +16,15 @@ public:
     void setEnd();
     int getNextLineNumber();
     void reset();
+    void startInput(std::string name);
+    void finishInput(int value);
     void print(std::string s);
+    bool isSuspended();
     std::vector<std::string> getOutput();
 private:
     std::map<std::string,int> name2value;
     int number;
+    std::string inputVar;
     std::vector<std::string> output;
 
 };

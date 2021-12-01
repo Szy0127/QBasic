@@ -96,3 +96,11 @@ void REMsta::exec(Evalstate *state)
 {
     state->setNext();
 }
+INPUTsta::INPUTsta(std::string name):name(name){}
+void INPUTsta::exec(Evalstate *state)
+{
+    state->print(name+"=?");
+    state->startInput(name);
+    state->setNext();
+}
+INPUTsta::~INPUTsta(){}

@@ -39,15 +39,26 @@ public:
     void getTokens();
     void getStatements();
     Statement *getOneStatements(Token token);
+    /*mainwindow的run调用exec这个函数 但事实上 exec结束并不表示程序的执行已经结束了
+     * 在遇到input语句时 program会中断 将控制返回给console  获取输入 实际上这个时候exec函数已经结束了
+     * 在console获取到输入后 再调用continueExc函数
+     * 因为input语句导致了program与mainwindow控制的切换 所以没有想到以一个总体的函数表示的方法
+     *
+     *
+     */
     void exec();
+    void continueExec(int value);
     void execOne(std::string cmd);
     void appendCMD(int lineNumber,std::string cmd);
+    bool isSuspended();
 
     std::vector<std::string> getOutput();
 private:
     int hash(std::string s);
     void removeCmd(int n);
     void init();
+    void _exec();
+    std::map<int,Statement*>::iterator rip;
     Tokenizer *tokenizer;
     Parser *parser;
     Evalstate *evalstate;
