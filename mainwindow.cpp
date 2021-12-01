@@ -23,7 +23,8 @@ MainWindow::~MainWindow()
 void MainWindow::on_cmdLineEdit_editingFinished()
 {
     QString cmd = ui->cmdLineEdit->text();
-    ui->cmdLineEdit->setText("");
+    //ui->cmdLineEdit->setText("");
+    ui->cmdLineEdit->clear();
     if(cmd.isEmpty()){
         return;
     }

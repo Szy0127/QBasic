@@ -23,11 +23,13 @@ class Program
     enum{INPUT=1796};
 public:
     Program(std::string fileName);
-    ~Program(){
-            delete tokenizer;
-            delete parser;
-            delete evalstate;
-    }
+    Program();
+    ~Program();
+//    ~Program(){
+//            delete tokenizer;
+//            delete parser;
+//            delete evalstate;
+//    }
 
     static int stoi(std::string s);
     std::map<int,std::string> rawCommands; // 除了行号 都不处理 方便gui打印
@@ -45,7 +47,7 @@ public:
 private:
     int hash(std::string s);
     void removeCmd(int n);
-
+    void init();
     Tokenizer *tokenizer;
     Parser *parser;
     Evalstate *evalstate;

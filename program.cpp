@@ -17,25 +17,27 @@ Program::Program(std::string fileName)
         ss<<s;
         ss>>n;
         getline(ss,s);
-        if(rawCommands.count(n) && s.empty()){
-            removeCmd(n);
-        }else{
-        rawCommands[n] = s;
-        }
+        appendCMD(n,s);
     }
+    init();
 
+}
+Program::Program()
+{
+
+}
+void Program::init()
+{
     tokenizer = new Tokenizer;
     parser = new Parser;
     evalstate = new Evalstate;
 }
-
-//Program::~Program()
-//{
-//    std::cout<<123;
-//    delete tokenizer;
-//    delete parser;
-//    delete evalstate;
-//}
+Program::~Program()
+{
+    delete tokenizer;
+    delete parser;
+    delete evalstate;
+}
 
 void Program::getTokens()
 {
