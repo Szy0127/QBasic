@@ -1,7 +1,5 @@
-INPUT
-
-
-命令窗口剩余命令补全
+INPUT program挂起 还给mainwindow
+下个控制台输入必须是数字  交还给program
 
 语法树
 
