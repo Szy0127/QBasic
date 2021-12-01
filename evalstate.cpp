@@ -47,3 +47,17 @@ std::vector<std::string> Evalstate::getOutput()
 {
     return output;
 }
+bool Evalstate::isSuspended()
+{
+    return !inputVar.empty();
+}
+void Evalstate::startInput(std::string name)
+{
+    inputVar = name;
+}
+void Evalstate::finishInput(int value)
+{
+    name2value[inputVar] = value;
+    inputVar.clear();
+    output.push_back(">>" + std::to_string(value));
+}

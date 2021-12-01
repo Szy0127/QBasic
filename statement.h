@@ -105,4 +105,14 @@ public:
     virtual void exec(Evalstate *state)override;
 
 };
+class INPUTsta:public Statement
+{
+private:
+    std::string name;
+public:
+    INPUTsta(std::string name);
+    virtual ~INPUTsta();
+    virtual void exec(Evalstate *state)override;
+
+};
 #endif // STATEMENT_H

@@ -23,6 +23,7 @@ private:
     void LOAD();
     void RUN();
     void CLEAR();
+    void input(int n);
     void showCode();
     void showOutput();
 

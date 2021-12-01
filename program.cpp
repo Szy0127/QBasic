@@ -20,6 +20,7 @@ Program::Program(std::string fileName)
         appendCMD(n,s);
     }
     init();
+    rip = statements.end();
 
 }
 Program::Program()
@@ -85,6 +86,9 @@ Statement *Program::getOneStatements(Token token)
         sta = new IFsta(*op,exp,exp1,stoi(*(token.end()-1)));
         break;
     }
+    case INPUT:
+        sta = new INPUTsta(token[1]);
+        break;
     case REM:
         sta = new REMsta();
         break;
@@ -131,31 +135,45 @@ void Program::execOne(std::string cmd)
     Statement *sta = getOneStatements(token);
     sta->exec(evalstate);
 }
+
 void Program::exec()
 {
     getTokens();
     getStatements();
     evalstate->reset();
+    rip = statements.begin();
+    _exec();
+}
+void Program::_exec()
+{
     Statement *sta = nullptr;
     int next;
-    auto iter = statements.begin();
-    while(iter!=statements.end()){
-        sta = iter->second;
+    while(rip !=statements.end()){
+        sta = rip ->second;
         sta->exec(evalstate);
         next = evalstate->getNextLineNumber();
         switch (next) {
         case -2:
-            iter = statements.end();
+            rip = statements.end();
             break;
         case -1:
-            iter++;
+            rip++;
             break;
         default:
-            iter = statements.find(next);
+            rip = statements.find(next);
+        }
+        if(evalstate->isSuspended()){
+            break;
         }
     }
 }
-
+void Program::continueExec(int value)
+{
+    evalstate->finishInput(value);
+    if(rip != statements.end()){
+        _exec();
+    }
+}
 int Program::hash(std::string s)
 {
     int sum = 0;
@@ -170,7 +188,9 @@ void Program::appendCMD(int lineNumber, std::string cmd)
 {
     if(rawCommands.count(lineNumber) && cmd.empty()){
         removeCmd(lineNumber);
-    }else{
+        return;
+    }
+    if(!cmd.empty()){
         rawCommands[lineNumber] = cmd;
     }
 }
@@ -178,4 +198,9 @@ void Program::appendCMD(int lineNumber, std::string cmd)
 std::vector<std::string> Program::getOutput()
 {
     return evalstate->getOutput();
+}
+
+bool Program::isSuspended()
+{
+    return evalstate->isSuspended();
 }
