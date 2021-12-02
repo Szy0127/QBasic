@@ -5,8 +5,11 @@
 #include<sstream>
 #include<evalstate.h>
 
-enum ExpressionType { CONSTANT, IDENTIFIER, COMPOUND };
+namespace  SZYExp{
 
+enum ExpressionType { CONSTANT, IDENTIFIER, COMPOUND };
+class Expression;
+std::vector<std::string> createLevel(Expression* exp); //根据exp树构造层次遍历的结果 每层用空字符串隔开
 
 class Expression
 {
@@ -15,15 +18,16 @@ public:
     virtual ~Expression()=0;
     virtual int eval(Evalstate *state) = 0;
     virtual std::string toString() = 0;
-//    virtual ExpressionType type() = 0;
+    virtual ExpressionType type()=0;
+    virtual std::string getOperator();
 
 // /* Getter methods for convenience */
 
 //    virtual int getConstantValue();
 //    virtual std::string getIdentifierName();
 //    virtual std::string getOperator();
-//    virtual Expression *getLHS();
-//    virtual Expression *getRHS();
+    virtual Expression *getLeft();
+    virtual Expression *getRight();
 
 };
 
@@ -33,8 +37,9 @@ public:
 
    ConstantExp(int value);
    virtual ~ConstantExp();
-   virtual int eval(Evalstate *state);
-   virtual std::string toString();
+   virtual int eval(Evalstate *state)override;
+   virtual std::string toString()override;
+   virtual ExpressionType type() override;
 //   virtual ExpressionType type();
 
 //   virtual int getConstantValue();
@@ -50,9 +55,9 @@ public:
 
    IdentifierExp(std::string name);
    virtual ~IdentifierExp();
-   virtual int eval(Evalstate *state);
-   virtual std::string toString();
-//   virtual ExpressionType type();
+   virtual int eval(Evalstate *state)override;
+   virtual std::string toString()override;
+   virtual ExpressionType type()override;
 
 //   virtual std::string getIdentifierName();
 
@@ -70,13 +75,14 @@ public:
    CompoundExp(std::string op, Expression *left, Expression *right);
    virtual ~CompoundExp();
 
-   virtual int eval(Evalstate *state);
-   virtual std::string toString();
-//   virtual ExpressionType type();
+   virtual int eval(Evalstate *state)override;
+   virtual std::string toString()override;
+   virtual ExpressionType type()override;
+   std::string getOperator()override;
 
 //   virtual std::string getOperator();
-//   virtual Expression *getLHS();
-//   virtual Expression *getRHS();
+   virtual Expression *getLeft()override;
+   virtual Expression *getRight()override;
 
 private:
 
@@ -84,5 +90,5 @@ private:
    Expression *left, *right;
 
 };
-
+}
 #endif // EXPRESSION_H

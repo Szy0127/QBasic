@@ -26,6 +26,7 @@ private:
     void input(int n);
     void showCode();
     void showOutput();
+    void showTree();
 
 private:
     Ui::MainWindow *ui;

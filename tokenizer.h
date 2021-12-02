@@ -14,6 +14,7 @@ public:
     Tokenizer();
     ~Tokenizer();
     Token string2tokens(std::string s);
+    std::string tokens2string(Token token);
 
 };
 

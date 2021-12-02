@@ -81,8 +81,8 @@ Statement *Program::getOneStatements(Token token)
             op = find(token.begin(),token.end(),validOp);
         }
 
-        exp = parser->token2Exp(std::vector<std::string>(token.begin()+1,op));
-        exp1 = parser->token2Exp(std::vector<std::string>(op+1,token.end()-2));
+        exp = parser->token2Exp(Token(token.begin()+1,op));
+        exp1 = parser->token2Exp(Token(op+1,token.end()-2));
         sta = new IFsta(*op,exp,exp1,stoi(*(token.end()-1)));
         break;
     }
@@ -90,7 +90,10 @@ Statement *Program::getOneStatements(Token token)
         sta = new INPUTsta(token[1]);
         break;
     case REM:
-        sta = new REMsta();
+        //rem的内容不需要解析为token 一个字符串整体就可以 但是其他的命令都需要 所以不想单独拿出来写一个逻辑
+        //这里需要把提取出来的token再恢复回去
+        //实际上token2string的操作只有这里用到 只要把函数中的开始定为begin+1（跳过REM） 就可以省略这里的复制操作 但是影响了函数的逻辑 没有采用
+        sta = new REMsta(tokenizer->tokens2string(Token(token.begin()+1,token.end())));
         break;
     case END:
         sta = new ENDsta();

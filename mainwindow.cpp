@@ -100,6 +100,7 @@ void MainWindow::input(int n)
 void MainWindow::RUN()
 {
     ui->textBrowser->clear();
+    ui->treeDisplay->clear();
     if(!program){
         QMessageBox::warning(this, "错误", "请先加载程序");
         return;
@@ -108,11 +109,13 @@ void MainWindow::RUN()
     //但是这是应该是等待用户输入 应当开启下一轮的exec 因此在调用input后仍需showOutput
     program->exec();
     showOutput();
+    showTree();
 }
 void MainWindow::CLEAR()
 {
     ui->CodeDisplay->clear();
     ui->textBrowser->clear();
+    ui->treeDisplay->clear();
     program.reset();
 }
 void MainWindow::showCode()
@@ -129,4 +132,14 @@ void MainWindow::showOutput()
     for(auto &o:program->getOutput()){
         ui->textBrowser->append(QString::fromStdString(o));
     }
+}
+
+void MainWindow::showTree(){
+    for(auto &sta:program->statements){
+        ui->treeDisplay->append(QString::number(sta.first));
+        for(auto &line:sta.second->getTree()){
+            ui->treeDisplay->append(QString::fromStdString(line));
+        }
+    }
+
 }

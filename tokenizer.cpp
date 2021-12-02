@@ -59,7 +59,16 @@ Token Tokenizer::string2tokens(std::string cmd)
     }
     return tokens;
 }
-
+std::string Tokenizer::tokens2string(Token token)
+{
+    std::string res = "";
+    for(auto &t:token){
+        res += t;
+        res += " ";
+    }
+    res.pop_back();//最后一个空格
+    return res;
+}
 bool Tokenizer::isDigit(char c)
 {
     return c >= '0' && c <= '9';

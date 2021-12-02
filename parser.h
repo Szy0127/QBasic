@@ -6,6 +6,7 @@
 #include<iostream>
 #include<expression.h>
 #include<map>
+using namespace SZYExp;
 typedef std::vector<std::string> Token;
 class Parser
 {

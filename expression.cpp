@@ -1,10 +1,29 @@
 #include "expression.h"
 #include <cmath>
+#include <queue>
+using SZYExp::Expression;
+using SZYExp::ConstantExp;
+using SZYExp::IdentifierExp;
+using SZYExp::CompoundExp;
+using SZYExp::ExpressionType;
+
 Expression::Expression()
 {
 
 }
 Expression::~Expression(){}
+std::string Expression::getOperator()
+{
+    return "";
+}
+Expression* Expression::getLeft()
+{
+    return nullptr;
+}
+Expression* Expression::getRight()
+{
+    return nullptr;
+}
 ConstantExp::ConstantExp(int value):value(value){}
 ConstantExp::~ConstantExp(){}
 IdentifierExp::IdentifierExp(std::string name):name(name){}
@@ -77,4 +96,69 @@ int CompoundExp::eval(Evalstate *state) {
 std::string CompoundExp::toString()
 {
     return "("+left->toString()+op+right->toString()+")";
+}
+
+ExpressionType ConstantExp::type()
+{
+    return CONSTANT;
+}
+ExpressionType IdentifierExp::type()
+{
+    return IDENTIFIER;
+}
+ExpressionType CompoundExp::type()
+{
+    return COMPOUND;
+}
+std::string CompoundExp::getOperator()
+
+{
+    return op;
+}
+Expression* CompoundExp::getLeft()
+{
+    return left;
+}
+Expression* CompoundExp::getRight()
+{
+    return right;
+}
+
+std::vector<std::string> SZYExp::createLevel(Expression* exp)
+{
+    std::vector<std::string> level;
+    std::queue<Expression*> q;
+    q.push(exp);
+    q.push(nullptr);
+    Expression *tmp;
+    while(!q.empty()){
+        tmp = q.front();
+        q.pop();
+        if(!tmp){
+            level.push_back("");
+            if(!q.front()){
+                break;
+            }
+            q.push(nullptr);
+        }else{
+            switch (tmp->type()) {
+            case CONSTANT:
+                level.push_back(tmp->toString());
+                break;
+            case IDENTIFIER:
+                level.push_back(tmp->toString());
+                break;
+            case COMPOUND:
+                level.push_back(tmp->getOperator());
+                if(tmp->getLeft()){
+                    q.push(tmp->getLeft());
+                }
+                if(tmp->getRight()){
+                    q.push(tmp->getRight());
+                }
+                break;
+            }
+        }
+    }
+    return level;
 }
