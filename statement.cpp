@@ -3,6 +3,14 @@
 
 using SZYExp::Expression;
 const std::string Statement::pad4 = "    ";
+std::string Statement::itos(int n)
+{
+    std::stringstream ss;
+    ss<<n;
+    std::string res;
+    ss>>res;
+    return res;
+}
 Statement::Statement()
 {
 
@@ -62,18 +70,16 @@ Expression *PRINTsta::getExp()
 void PRINTsta::exec(Evalstate *state)
 {
     //std::cout<<exp->eval(state)<<std::endl;
-    int resInt = exp->eval(state);
-    std::stringstream ss;
-    ss<<resInt;
-    std::string resString;
-    ss>>resString;
-    state->print(resString);
+    int res = exp->eval(state);
+    state->print(itos(res));
     state->setNext();
 
 }
 
 IFsta::IFsta(std::string op,Expression *l,Expression *r,int n):op(op),left(l),right(r),lineNumber(n)
 {
+    levelLeft = createLevel(left);
+    levelRight = createLevel(right);
     createTree();
 }
 
@@ -175,12 +181,8 @@ void REMsta::createTree()
 
 void GOTOsta::createTree()
 {
-    std::stringstream ss;
-    ss<<lineNumber;
-    std::string n;
-    ss>>n;
     tree.push_back("GOTO");
-    tree.push_back(pad4 + n);
+    tree.push_back(pad4 + itos(lineNumber));
 }
 void ENDsta::createTree()
 {
@@ -189,5 +191,33 @@ void ENDsta::createTree()
 void IFsta::createTree()
 {
     tree.push_back("IF THEN");
+    std::vector<std::string> level;
+    int lengthl = levelLeft.size();
+    int lengthr = levelRight.size();
+    int l = 0;
+    int r = 0;
+    while(l < lengthl || r < lengthr){
+        while(l < lengthl && !levelLeft[l].empty()){
+            level.push_back(levelLeft[l]);
+            l++;
+        }
+        while(r < lengthr && !levelRight[r].empty()){
+            level.push_back(levelRight[r]);
+            r++;
+        }
+        level.push_back("");
+        l++;
+        r++;
+    }
+    level.insert(level.begin()+1,op);
+    level.insert(level.begin()+3,itos(lineNumber));
+    std::string pad = pad4;
+    for(auto &s:level){
+        if(s.empty()){
+            pad += pad4;
+        }else{
+            tree.push_back(pad+s);
+        }
+    }
 
 }

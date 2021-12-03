@@ -26,8 +26,11 @@ enum StatementType{LET,IF,PRINT,INPUT,GOTO,END,REM};
 
 class Statement
 {
+    //所有statement都必须生成语法树 所以tree和getTree设置为基类的成员
+    //每个statement的语法树格式不一样 createTree设置为纯虚函数
 protected:
     static const std::string pad4;
+    static std::string itos(int n);
     Tree tree;//语法树
 public:
     Statement();

@@ -135,10 +135,17 @@ void MainWindow::showOutput()
 }
 
 void MainWindow::showTree(){
+    bool first;
     for(auto &sta:program->statements){
-        ui->treeDisplay->append(QString::number(sta.first));
+        first = true;
+        //ui->treeDisplay->append(QString::number(sta.first));
         for(auto &line:sta.second->getTree()){
-            ui->treeDisplay->append(QString::fromStdString(line));
+            if(first){
+                ui->treeDisplay->append(QString::number(sta.first) + " "+QString::fromStdString(line));
+                first = false;
+            }else{
+                ui->treeDisplay->append(QString::fromStdString(line));
+            }
         }
     }
 
