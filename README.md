@@ -1,28 +1,36 @@
-<<<<<<< Updated upstream
-INPUT program挂起 还给mainwindow
-下个控制台输入必须是数字  交还给program
+# QBasic
 
-=======
->>>>>>> Stashed changes
-语法树
+### 待完成
 
-没有LOAD时候输入代码
+- 没有LOAD时不存在program对象 所有程序相关功能失效
+- RUN之前/之后销毁变量的问题
 
-RUN之前之后销毁变量的问题
+### basic语言
 
+- LET
+- PRINT
+- INPUT
+- IF THEN
+- GOTO
+- REM
+- END
 
-命令输入窗口作用： 回车结束
-1 指令
-RUN
-LOAD
-LIST
-CLEAR
-HELP
-QUIT
+### GUI
 
-2 行号 代码 加入到左上
+- 左上：显示代码段 可通过文件读取或命令窗口输入 需要加行号
+- 右上：程序执行后的结果
+- 下：每行代码的语法树 代码有问题的会显示错误
 
-3  代码 直接执行
+### 命令输入窗口作用： 
 
-4 INPUT 交互
+- 控制台指令
+  - RUN
+  - LOAD
+  - CLEAR
+  - HELP
+  - QUIT
+
+- 行号 代码 加入到程序中
+- 代码 直接执行
+- 代码中INPUT命令的交互
 
