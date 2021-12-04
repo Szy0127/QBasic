@@ -13,6 +13,7 @@ SOURCES += \
     expression.cpp \
     main.cpp \
     mainwindow.cpp \
+    myexception.cpp \
     parser.cpp \
     program.cpp \
     statement.cpp \
@@ -22,6 +23,7 @@ HEADERS += \
     evalstate.h \
     expression.h \
     mainwindow.h \
+    myexception.h \
     parser.h \
     program.h \
     statement.h \

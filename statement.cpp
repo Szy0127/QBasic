@@ -15,11 +15,11 @@ Statement::Statement()
 {
 
 }
-Tree Statement::getTree()
+Tree Statement::getTree()const
 {
     return tree;
 }
-Expression *Statement::getExp()
+Expression *Statement::getExp()const
 {
     return nullptr;
 }
@@ -34,7 +34,7 @@ LETsta::~LETsta()
 {
     delete exp;
 }
-Expression *LETsta::getExp()
+Expression *LETsta::getExp()const
 {
     return exp;
 }
@@ -63,7 +63,7 @@ PRINTsta::~PRINTsta()
 {
     delete exp;
 }
-Expression *PRINTsta::getExp()
+Expression *PRINTsta::getExp()const
 {
     return exp;
 }

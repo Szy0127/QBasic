@@ -50,7 +50,7 @@ public:
     void continueExec(int value);
     void execOne(std::string cmd);
     void appendCMD(int lineNumber,std::string cmd);
-    bool isSuspended();
+    bool isSuspended()const;
 
     std::vector<std::string> getOutput();
 private:

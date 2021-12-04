@@ -203,7 +203,7 @@ std::vector<std::string> Program::getOutput()
     return evalstate->getOutput();
 }
 
-bool Program::isSuspended()
+bool Program::isSuspended()const
 {
     return evalstate->isSuspended();
 }

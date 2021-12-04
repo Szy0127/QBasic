@@ -17,17 +17,17 @@ public:
     Expression();
     virtual ~Expression()=0;
     virtual int eval(Evalstate *state) = 0;
-    virtual std::string toString() = 0;
-    virtual ExpressionType type()=0;
-    virtual std::string getOperator();
+    virtual std::string toString()const = 0;
+    virtual ExpressionType type()const=0;
+    virtual std::string getOperator()const;
 
 // /* Getter methods for convenience */
 
 //    virtual int getConstantValue();
 //    virtual std::string getIdentifierName();
 //    virtual std::string getOperator();
-    virtual Expression *getLeft();
-    virtual Expression *getRight();
+    virtual Expression *getLeft()const;
+    virtual Expression *getRight()const;
 
 };
 
@@ -38,8 +38,8 @@ public:
    ConstantExp(int value);
    virtual ~ConstantExp();
    virtual int eval(Evalstate *state)override;
-   virtual std::string toString()override;
-   virtual ExpressionType type() override;
+   virtual std::string toString()const override;
+   virtual ExpressionType type()const override;
 //   virtual ExpressionType type();
 
 //   virtual int getConstantValue();
@@ -56,8 +56,8 @@ public:
    IdentifierExp(std::string name);
    virtual ~IdentifierExp();
    virtual int eval(Evalstate *state)override;
-   virtual std::string toString()override;
-   virtual ExpressionType type()override;
+   virtual std::string toString()const override;
+   virtual ExpressionType type()const override;
 
 //   virtual std::string getIdentifierName();
 
@@ -76,13 +76,13 @@ public:
    virtual ~CompoundExp();
 
    virtual int eval(Evalstate *state)override;
-   virtual std::string toString()override;
-   virtual ExpressionType type()override;
-   std::string getOperator()override;
+   virtual std::string toString()const override;
+   virtual ExpressionType type()const override;
+   std::string getOperator()const override;
 
 //   virtual std::string getOperator();
-   virtual Expression *getLeft()override;
-   virtual Expression *getRight()override;
+   virtual Expression *getLeft()const override;
+   virtual Expression *getRight()const override;
 
 private:
 

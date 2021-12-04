@@ -12,15 +12,15 @@ Expression::Expression()
 
 }
 Expression::~Expression(){}
-std::string Expression::getOperator()
+std::string Expression::getOperator()const
 {
     return "";
 }
-Expression* Expression::getLeft()
+Expression* Expression::getLeft()const
 {
     return nullptr;
 }
-Expression* Expression::getRight()
+Expression* Expression::getRight()const
 {
     return nullptr;
 }
@@ -42,7 +42,7 @@ int ConstantExp::eval(Evalstate *state) {
 //{
 //    return value;
 //}
-std::string ConstantExp::toString()
+std::string ConstantExp::toString()const
 {
     std::stringstream ss;
     ss<<value;
@@ -58,7 +58,7 @@ int IdentifierExp::eval(Evalstate *state) {
 //{
 //    return name;
 //}
-std::string IdentifierExp::toString()
+std::string IdentifierExp::toString()const
 {
     return name;
 }
@@ -81,45 +81,33 @@ int CompoundExp::eval(Evalstate *state) {
    return 0;
 }
 
-//std::string CompoundExp::getOperator()
-//{
-//    return op;
-//}
-//Expression* CompoundExp::getLHS()
-//{
-//    return left;
-//}
-//Expression* CompoundExp::getRHS()
-//{
-//    return right;
-//}
-std::string CompoundExp::toString()
+std::string CompoundExp::toString()const
 {
     return "("+left->toString()+op+right->toString()+")";
 }
 
-ExpressionType ConstantExp::type()
+ExpressionType ConstantExp::type()const
 {
     return CONSTANT;
 }
-ExpressionType IdentifierExp::type()
+ExpressionType IdentifierExp::type()const
 {
     return IDENTIFIER;
 }
-ExpressionType CompoundExp::type()
+ExpressionType CompoundExp::type()const
 {
     return COMPOUND;
 }
-std::string CompoundExp::getOperator()
+std::string CompoundExp::getOperator()const
 
 {
     return op;
 }
-Expression* CompoundExp::getLeft()
+Expression* CompoundExp::getLeft()const
 {
     return left;
 }
-Expression* CompoundExp::getRight()
+Expression* CompoundExp::getRight()const
 {
     return right;
 }

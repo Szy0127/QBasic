@@ -69,7 +69,7 @@ std::string Tokenizer::tokens2string(Token token)
     res.pop_back();//最后一个空格
     return res;
 }
-bool Tokenizer::isDigit(char c)
+bool Tokenizer::isDigit(char c)const
 {
     return c >= '0' && c <= '9';
 }

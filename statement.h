@@ -38,8 +38,8 @@ public:
     //带=0的是纯虚函数 所有派生类必须都实现
     virtual void exec(Evalstate *state)=0;
     virtual void createTree()=0;
-    Tree getTree();
-    virtual SZYExp::Expression* getExp();
+    Tree getTree()const;
+    virtual SZYExp::Expression* getExp()const;
 
     //virtual std::string getVar();
     
@@ -56,7 +56,7 @@ private:
 public:
     LETsta(std::string var,SZYExp::Expression *exp);
     virtual ~LETsta();
-    virtual SZYExp::Expression * getExp() override;
+    virtual SZYExp::Expression * getExp()const override;
     virtual void exec(Evalstate *state)override;
     //virtual Tree getTree()override;
 };
@@ -71,7 +71,7 @@ public:
     PRINTsta(SZYExp::Expression *exp);
     virtual ~PRINTsta();
 
-    virtual SZYExp::Expression * getExp() override;
+    virtual SZYExp::Expression * getExp()const override;
     virtual void exec(Evalstate *state)override;
     //virtual Tree getTree()override;
 };

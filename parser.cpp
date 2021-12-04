@@ -89,7 +89,7 @@ Expression* Parser::token2Exp(Token tokens)
     return operands.top();
 }
 
-bool Parser::isConstant(std::string s)
+bool Parser::isConstant(std::string s)const
 {
     for(auto c:s){
         if(c<'0' || c > '9'){//暂不支持十六进制

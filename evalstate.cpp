@@ -20,7 +20,7 @@ void Evalstate::setGoto(int n)
 
     number = n;
 }
-int Evalstate::getNextLineNumber()
+int Evalstate::getNextLineNumber()const
 {
     return number;
 }
@@ -43,11 +43,11 @@ void Evalstate::print(std::string s)
 {
     output.push_back(s);
 }
-std::vector<std::string> Evalstate::getOutput()
+std::vector<std::string> Evalstate::getOutput()const
 {
     return output;
 }
-bool Evalstate::isSuspended()
+bool Evalstate::isSuspended()const
 {
     return !inputVar.empty();
 }

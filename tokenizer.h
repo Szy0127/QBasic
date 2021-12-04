@@ -9,7 +9,7 @@ class Tokenizer
     std::set<std::string> operators={"+","-","*","/","**","=","<",">","(",")"};
 private:
     Token tokens;
-    bool isDigit(char c);
+    bool isDigit(char c)const;
 public:
     Tokenizer();
     ~Tokenizer();
