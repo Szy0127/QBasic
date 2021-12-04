@@ -4,8 +4,10 @@
 #include<iostream>
 #include<sstream>
 #include<evalstate.h>
+#include <set>
 
 namespace  SZYExp{
+static std::set<std::string> banned = {"IF","END","REM","THEN","GOTO","LET","PRINT","INPUT"};
 
 enum ExpressionType { CONSTANT, IDENTIFIER, COMPOUND };
 class Expression;
@@ -53,7 +55,7 @@ class IdentifierExp: public Expression {
 
 public:
 
-   IdentifierExp(std::string name);
+   IdentifierExp(std::string n);
    virtual ~IdentifierExp();
    virtual int eval(Evalstate *state)override;
    virtual std::string toString()const override;

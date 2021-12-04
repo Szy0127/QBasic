@@ -1,5 +1,5 @@
 #include "evalstate.h"
-
+#include "myexception.h"
 Evalstate::Evalstate()
 {
     number = -1;
@@ -7,7 +7,11 @@ Evalstate::Evalstate()
 Evalstate::~Evalstate(){}
 int Evalstate::getValue(std::string name)
 {
-    return name2value[name];
+    if(name2value.count(name)){
+        return name2value[name];
+    }
+    throw NameError(name);
+
 }
 
 void Evalstate::setValue(std::string name, int value)

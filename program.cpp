@@ -1,8 +1,10 @@
 #include "program.h"
+#include "myexception.h"
 #include<iostream>
 #include<fstream>
 #include<sstream>
 #include<algorithm>
+#include<stdexcept>
 using namespace SZYQBasic;
 Program::Program(std::string fileName)
 {
@@ -44,7 +46,11 @@ void Program::getTokens()
 {
     commands.clear();
     for(auto &cmd:rawCommands){
-        commands[cmd.first]= tokenizer->string2tokens(cmd.second);
+        try {
+            commands[cmd.first]= tokenizer->string2tokens(cmd.second);
+        } catch (IdentifierError &e) {
+            error[cmd.first] = e.what();
+        }
     }
 }
 
@@ -57,21 +63,74 @@ Statement *Program::getOneStatements(Token token)
     //本来没考虑到命令窗口可以增加statment 所以整体是写在另一个函数内的循环
     //为了避免多层嵌套的if-else 用switch
     //但是这里单独一个函数的话 其实if return就可以了
-    int hashKey = hash(token[0]);
+    int hashKey = hash(token.at(0));
     switch (hashKey) {
-    case LET:
-        exp = parser->token2Exp(std::vector<std::string>(token.begin()+3,token.end()));
-        sta = new LETsta(token[1],exp);
+    case LET:{
+        try {
+            token.at(3);//为了触发exception
+        } catch (std::out_of_range &e) {
+            throw StatementError("LET");
+        }
+        if(SZYExp::banned.count(token[1])){
+            throw IdentifierError(token[1]);
+        }
+        Token expr(token.begin()+3,token.end());
+        try {
+            exp = parser->token2Exp(expr);
+            sta = new LETsta(token[1],exp);
+        } catch (IdentifierExp &e) {
+            throw e;
+        } catch(Myexception &e){
+            throw ExpressionError(tokenizer->tokens2string(expr));
+        }
         break;
+    }
 
-    case PRINT:
-        exp = parser->token2Exp(std::vector<std::string>(token.begin()+1,token.end()));
-        sta = new PRINTsta(exp);
+    case PRINT:{
+        try {
+            token.at(1);
+        } catch (std::out_of_range &e) {
+            throw StatementError("PRINT");
+        }
+        Token expr(token.begin()+1,token.end());
+        try {
+            exp = parser->token2Exp(expr);
+            sta = new PRINTsta(exp);
+        } catch (IdentifierExp &e) {
+            throw e;
+        } catch (Myexception &e){
+            throw ExpressionError(tokenizer->tokens2string(expr));
+        }
+
         break;
-    case GOTO:
-        sta = new GOTOsta(stoi(token[1]));
+    }
+    case GOTO:{
+        try {
+            token.at(1);
+        } catch (std::out_of_range &e) {
+            throw StatementError("GOTO");
+        }
+        if(token.size()>2){
+            throw StatementError("GOTO");
+        }
+        int n = stoi(token[1]);
+        if(rawCommands.count(n)){
+            sta = new GOTOsta(n);
+        }else{
+            throw LineError(token[1]);
+        }
         break;
+    }
     case IF:{
+        try {
+            token.at(5);
+        } catch (std::out_of_range &e) {
+            throw StatementError("IF THEN");
+        }
+        int n = stoi(*(token.end()-1));
+        if(!rawCommands.count(n)){
+            throw LineError(*(token.end()-1));
+        }
         // n IF exp1 op exp2 THEN n1
         auto op = token.end();
         for(const auto &validOp:validCompareOperators){
@@ -80,27 +139,67 @@ Statement *Program::getOneStatements(Token token)
             }
             op = find(token.begin(),token.end(),validOp);
         }
+        if(op == token.end()){
+            throw StatementError("IF");
+        }
+        Token token1(token.begin()+1,op);
+        Token token2(op+1,token.end()-2);
+        try {
+            exp = parser->token2Exp(token1);
+        } catch (IdentifierExp &e) {
+            throw e;
+        } catch (Myexception &e){
+            throw ExpressionError(tokenizer->tokens2string(token1));
+        }
+        try {
+            exp1 = parser->token2Exp(token2);
+            sta = new IFsta(*op,exp,exp1,n);
+        } catch (IdentifierExp &e) {
+            throw e;
+        } catch (Myexception &e){
+            throw ExpressionError(tokenizer->tokens2string(token2));
+        }
 
-        exp = parser->token2Exp(Token(token.begin()+1,op));
-        exp1 = parser->token2Exp(Token(op+1,token.end()-2));
-        sta = new IFsta(*op,exp,exp1,stoi(*(token.end()-1)));
         break;
     }
-    case INPUT:
+    case INPUT:{
+        try {
+            token.at(1);
+        } catch (std::out_of_range &e) {
+            throw StatementError("INPUT");
+        }
+        if(token.size()>2){
+            throw StatementError("INPUT");
+        }
+        if(SZYExp::banned.count(token[1])){
+            throw IdentifierError(token[1]);
+        }
         sta = new INPUTsta(token[1]);
+
         break;
-    case REM:
+    }
+    case REM:{
         //rem的内容不需要解析为token 一个字符串整体就可以 但是其他的命令都需要 所以不想单独拿出来写一个逻辑
         //这里需要把提取出来的token再恢复回去
         //实际上token2string的操作只有这里用到 只要把函数中的开始定为begin+1（跳过REM） 就可以省略这里的复制操作 但是影响了函数的逻辑 没有采用
+        //REM如果后面是空白的话这里认为也是不符合的
+        try {
+            token.at(1);
+        } catch (std::out_of_range &e) {
+            throw StatementError("REM");
+        }
         sta = new REMsta(tokenizer->tokens2string(Token(token.begin()+1,token.end())));
         break;
+    }
     case END:
+        if(token.size()>1){
+            throw StatementError("END");
+        }
         sta = new ENDsta();
         break;
     default:
+        throw StatementError(token[0]+" is not a valid statement");
         break;
-        //error
     }
     return sta;
 }
@@ -111,8 +210,12 @@ void Program::getStatements()
     for(auto &cmd:commands){
         int num = cmd.first;
         Token line(cmd.second);
-        Statement *sta = getOneStatements(line);
-        statements[num] = sta;
+        try {
+            Statement *sta = getOneStatements(line);
+            statements[num] = sta;
+        } catch (Myexception &e) {
+            error[num] = e.what();
+        }
     }
 }
 void Program::removeCmd(int n)
@@ -134,9 +237,14 @@ int Program::stoi(std::string s)
 }
 void Program::execOne(std::string cmd)
 {
-    Token token = tokenizer->string2tokens(cmd);
-    Statement *sta = getOneStatements(token);
-    sta->exec(evalstate);
+    try {
+        Token token = tokenizer->string2tokens(cmd);
+        Statement *sta = getOneStatements(token);
+        sta->exec(evalstate);
+    } catch (Myexception &e) {
+        std::cout<< e.what()<<std::endl;
+    }
+
 }
 
 void Program::exec()
@@ -153,7 +261,11 @@ void Program::_exec()
     int next;
     while(rip !=statements.end()){
         sta = rip ->second;
-        sta->exec(evalstate);
+        try {
+            sta->exec(evalstate);
+        } catch (Myexception &e) {
+            evalstate->print(e.what());
+        }
         next = evalstate->getNextLineNumber();
         switch (next) {
         case -2:
@@ -163,7 +275,12 @@ void Program::_exec()
             rip++;
             break;
         default:
-            rip = statements.find(next);
+            if(error.count(next)){//if 或goto 的目标行有错误 执行if的下一行
+                rip++;
+            }else{
+                rip = statements.find(next);
+            }
+
         }
         if(evalstate->isSuspended()){
             break;

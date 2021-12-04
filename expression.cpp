@@ -1,4 +1,5 @@
 #include "expression.h"
+#include "myexception.h"
 #include <cmath>
 #include <queue>
 using SZYExp::Expression;
@@ -26,7 +27,14 @@ Expression* Expression::getRight()const
 }
 ConstantExp::ConstantExp(int value):value(value){}
 ConstantExp::~ConstantExp(){}
-IdentifierExp::IdentifierExp(std::string name):name(name){}
+IdentifierExp::IdentifierExp(std::string n)
+{
+    if(banned.count(n)){
+        throw IdentifierError(n);
+    }else{
+        name = n;
+    }
+}
 IdentifierExp::~IdentifierExp(){}
 CompoundExp::CompoundExp(std::string op,Expression *left,Expression *right):op(op),left(left),right(right){}
 CompoundExp::~CompoundExp()

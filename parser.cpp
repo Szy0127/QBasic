@@ -1,4 +1,5 @@
 #include "parser.h"
+#include "myexception.h"
 #include <sstream>
 Parser::Parser()
 {
@@ -20,8 +21,15 @@ Parser::Parser()
 Parser::~Parser(){}
 void Parser::merge()
 {
+    if(operators.empty()){
+        throw Myexception();
+    }
     std::string op = operators.top();
     operators.pop();
+
+    if(operands.empty()){
+        throw Myexception();
+    }
     Expression *right = operands.top();
     operands.pop();
     bool negative = false;
@@ -31,10 +39,12 @@ void Parser::merge()
     }
     Expression *left = nullptr;//表示负数的-是单目运算符
     if(!negative){
+        if(operands.empty()){
+            throw Myexception();
+        }
         left = operands.top();
         operands.pop();
     }
-
     operands.push(new CompoundExp(op,left,right));
 }
 Expression* Parser::token2Exp(Token tokens)
@@ -43,7 +53,7 @@ Expression* Parser::token2Exp(Token tokens)
         operands.pop();
     }
     while(!operators.empty()){
-        operands.pop();
+        operators.pop();
     }
     isFirst = true;
     for(auto &token:tokens){
@@ -85,6 +95,9 @@ Expression* Parser::token2Exp(Token tokens)
     }
     while(!operators.empty()){//这里可能数量不匹配
         merge();
+    }
+    if(operands.empty() || operands.size()>1){
+        throw Myexception();
     }
     return operands.top();
 }

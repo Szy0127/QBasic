@@ -40,8 +40,8 @@ Expression *LETsta::getExp()const
 }
 void LETsta::exec(Evalstate *state)
 {
-    state->setValue(var,exp->eval(state));
     state->setNext();
+    state->setValue(var,exp->eval(state));
 }
 
 GOTOsta::GOTOsta(int n):lineNumber(n)
@@ -69,10 +69,9 @@ Expression *PRINTsta::getExp()const
 }
 void PRINTsta::exec(Evalstate *state)
 {
-    //std::cout<<exp->eval(state)<<std::endl;
+    state->setNext();
     int res = exp->eval(state);
     state->print(itos(res));
-    state->setNext();
 
 }
 
@@ -90,6 +89,7 @@ IFsta::~IFsta()
 }
 void IFsta::exec(Evalstate *state)
 {
+    state->setNext();
     int l = left->eval(state);
     int r = right->eval(state);
     bool go = false;
@@ -107,8 +107,6 @@ void IFsta::exec(Evalstate *state)
     }
     if(go){
         state->setGoto(lineNumber);
-    }else{
-        state->setNext();
     }
 }
 
@@ -128,8 +126,8 @@ REMsta::REMsta(std::string c):content(c)
 REMsta::~REMsta(){}
 void REMsta::exec(Evalstate *state)
 {
-    state->print("#"+content);
     state->setNext();
+    state->print("#"+content);
 }
 INPUTsta::INPUTsta(std::string name):name(name)
 {
@@ -137,9 +135,9 @@ INPUTsta::INPUTsta(std::string name):name(name)
 }
 void INPUTsta::exec(Evalstate *state)
 {
+    state->setNext();
     state->print(name+"=?");
     state->startInput(name);
-    state->setNext();
 }
 INPUTsta::~INPUTsta(){}
 void INPUTsta::createTree()

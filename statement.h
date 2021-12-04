@@ -37,6 +37,9 @@ public:
     virtual ~Statement()=0;
     //带=0的是纯虚函数 所有派生类必须都实现
     virtual void exec(Evalstate *state)=0;
+    //exec中必须改变state的下一行语句
+    //if 和goto 可能会改 其他setNext
+    //但是考虑到存在运行中错误的情况 即变量为定义 防止exec提前结束 事先setNext
     virtual void createTree()=0;
     Tree getTree()const;
     virtual SZYExp::Expression* getExp()const;

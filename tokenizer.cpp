@@ -1,4 +1,5 @@
 #include "tokenizer.h"
+#include "myexception.h"
 #include<sstream>
 
 Tokenizer::Tokenizer()
@@ -45,7 +46,7 @@ Token Tokenizer::string2tokens(std::string cmd)
                 if(isDigit(block[i])){
                     buf.push_back(block[i]);
                 }else{
-                    //error
+                    throw IdentifierError(std::string(1,buf.back())+std::string(1,block[i]));
                 }
             }else{
                 buf.push_back(block[i]);

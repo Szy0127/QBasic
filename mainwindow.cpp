@@ -87,7 +87,7 @@ void MainWindow::LOAD()
         return;
     }
 
-    //QString filePath = QString::fromStdString("t3.txt");
+    //QString filePath = QString::fromStdString("errorTest.txt");
     CLEAR();
     program.reset(new SZYQBasic::Program(filePath.toStdString()));
     showCode();
@@ -147,6 +147,9 @@ void MainWindow::showTree(){
                 ui->treeDisplay->append(QString::fromStdString(line));
             }
         }
+    }
+    for(auto &err:program->error){
+        ui->treeDisplay->append(QString::number(err.first) + " "+QString::fromStdString(err.second));
     }
 
 }
