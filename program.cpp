@@ -27,7 +27,7 @@ Program::Program(std::string fileName)
 }
 Program::Program()
 {
-
+    init();
 }
 void Program::init()
 {
@@ -242,7 +242,8 @@ void Program::execOne(std::string cmd)
         Statement *sta = getOneStatements(token);
         sta->exec(evalstate);
     } catch (Myexception &e) {
-        std::cout<< e.what()<<std::endl;
+        //std::cout<< e.what()<<std::endl;
+        evalstate->print(e.what());
     }
 
 }
@@ -251,7 +252,7 @@ void Program::exec()
 {
     getTokens();
     getStatements();
-    evalstate->reset();
+    evalstate->reset();//run之前会清空所有的变量 包括输出
     rip = statements.begin();
     _exec();
 }

@@ -13,6 +13,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->btnRunCode,&QPushButton::clicked,this,&MainWindow::RUN);
     connect(ui->btnClearCode,&QPushButton::clicked,this,&MainWindow::CLEAR);
     CLEAR();
+    //由于控制台的存在 没有程序(string的命令)存在时 也可以执行单行的程序 因此是需要一个程序对象存在的 clear在清除原对象的同时会生成一个新的空program对象
+    //program.reset(new SZYQBasic::Program());
 }
 
 MainWindow::~MainWindow()
@@ -33,9 +35,6 @@ void MainWindow::on_cmdLineEdit_editingFinished()
     int n = ss.peek();
     std::string num;
     if((n >= '0' && n <= '9') || n == '-'){//1 带行号 插入的代码  因为input的输入也是数字 所以正好一起判断了  但是input的数字可能是负数
-        if(!program){
-            return;//error
-        }
         ss>>num;
         n = SZYQBasic::Program::stoi(num);
         if(program->isSuspended()){
@@ -51,9 +50,6 @@ void MainWindow::on_cmdLineEdit_editingFinished()
     std::string consoleCmd;
     ss>>consoleCmd;
     if(SZYQBasic::validCommand.count(consoleCmd)){
-        if(!program){
-            return;//error
-        }
         program->execOne(c);
         showOutput();
         return;
@@ -71,11 +67,14 @@ void MainWindow::on_cmdLineEdit_editingFinished()
         return;
     }
     if(consoleCmd == "HELP"){
-        QMessageBox::information(this, "帮助", "1测试测试测试测试测试\n2测试测试测试测试测试\n3测试测试测试测试测试");
+        QMessageBox::information(this, "帮助", "控制台作用:\n1 LOAD RUN CLEAR HELP QUIT\n2 行号+代码插入到程序段\n3 代码 直接执行\n4 程序中input语句的交互");
+        return;
     }
     if(consoleCmd == "QUIT"){
         exit(0);
     }
+    QMessageBox::warning(this, "错误", "输入错误 请输入HELP查看合法命令");
+
 
 }
 
@@ -116,7 +115,7 @@ void MainWindow::CLEAR()
     ui->CodeDisplay->clear();
     ui->textBrowser->clear();
     ui->treeDisplay->clear();
-    program.reset();
+    program.reset(new SZYQBasic::Program());
 }
 void MainWindow::showCode()
 {
