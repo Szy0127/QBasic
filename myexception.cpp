@@ -34,4 +34,8 @@ std::string LineError::what()
 {
     return "line error:line" + lineNumber + " is not defined";
 }
-
+InputError::InputError(std::string n):input(n){}
+std::string InputError::what()
+{
+    return "input error: '" + input + "' is not a number";
+}

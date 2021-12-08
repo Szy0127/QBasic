@@ -17,7 +17,7 @@ public:
     int getNextLineNumber()const;
     void reset();
     void startInput(std::string name);
-    void finishInput(int value);
+    void finishInput(int value,bool valid = true);//错误输入时也需要结束输入命令
     void print(std::string s);
     bool isSuspended()const;
     std::vector<std::string> getOutput()const;

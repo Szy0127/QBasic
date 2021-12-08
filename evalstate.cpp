@@ -59,9 +59,12 @@ void Evalstate::startInput(std::string name)
 {
     inputVar = name;
 }
-void Evalstate::finishInput(int value)
+void Evalstate::finishInput(int value,bool valid)
 {
-    name2value[inputVar] = value;
     inputVar.clear();
+    if(!valid){
+        return;
+    }
+    name2value[inputVar] = value;
     output.push_back(">>" + std::to_string(value));
 }

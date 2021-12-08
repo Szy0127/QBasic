@@ -31,16 +31,16 @@ void MainWindow::on_cmdLineEdit_editingFinished()
         return;
     }
     std::string c = cmd.toStdString();
+    if(program->isSuspended()){
+        input(c);
+        return;
+    }
     std::stringstream ss(c);
     int n = ss.peek();
     std::string num;
-    if((n >= '0' && n <= '9') || n == '-'){//1 带行号 插入的代码  因为input的输入也是数字 所以正好一起判断了  但是input的数字可能是负数
+    if((n >= '0' && n <= '9')){//1 带行号 插入的代码
         ss>>num;
         n = SZYQBasic::Program::stoi(num);
-        if(program->isSuspended()){
-            input(n);
-            return;
-        }
         c.clear();
         getline(ss,c);
         program->appendCMD(n,c);
@@ -91,7 +91,7 @@ void MainWindow::LOAD()
     program.reset(new SZYQBasic::Program(filePath.toStdString()));
     showCode();
 }
-void MainWindow::input(int n)
+void MainWindow::input(std::string n)
 {
     program->continueExec(n);
     showOutput();

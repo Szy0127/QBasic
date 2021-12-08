@@ -28,6 +28,7 @@ Program::Program(std::string fileName)
 Program::Program()
 {
     init();
+    rip = statements.end();
 }
 void Program::init()
 {
@@ -288,9 +289,19 @@ void Program::_exec()
         }
     }
 }
-void Program::continueExec(int value)
+void Program::continueExec(std::string n)
 {
-    evalstate->finishInput(value);
+    try {
+        int value = stoi(n);
+        if(value == 0 && n[0] != 0){
+            evalstate->finishInput(value,false);
+            throw InputError(n);
+        }else{
+            evalstate->finishInput(value);
+        }
+    } catch (InputError &e) {
+        evalstate->print(e.what());
+    }
     if(rip != statements.end()){
         _exec();
     }

@@ -50,5 +50,12 @@ public:
     LineError(std::string n);
     virtual std::string what() override;
 };
-
+class InputError:public Myexception
+{
+private:
+    std::string input;
+public:
+    InputError(std::string n);
+    virtual std::string what() override;
+};
 #endif // MYEXCEPTION_H

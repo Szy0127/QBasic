@@ -48,7 +48,7 @@ public:
      *
      */
     void exec();
-    void continueExec(int value);
+    void continueExec(std::string n);
     void execOne(std::string cmd);
     void appendCMD(int lineNumber,std::string cmd);
     bool isSuspended()const;

@@ -23,7 +23,7 @@ private:
     void LOAD();
     void RUN();
     void CLEAR();
-    void input(int n);
+    void input(std::string n);
     void showCode();
     void showOutput();
     void showTree();
