@@ -2,8 +2,8 @@
 
 ### 待完成
 
-- 没有LOAD时不存在program对象 所有程序相关功能失效
-- RUN之前/之后销毁变量的问题
+- input输入错误的问题 这里需要修改suspend之后的逻辑 不能和行号一起进行判断
+- tokenizer和parser存在的环境问题
 
 ### basic语言
 
