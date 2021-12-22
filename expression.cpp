@@ -25,7 +25,10 @@ Expression* Expression::getRight()const
 {
     return nullptr;
 }
-ConstantExp::ConstantExp(int value):value(value){}
+ConstantExp::ConstantExp(int value):value(value)
+{
+    tree.push_back(toString());
+}
 ConstantExp::~ConstantExp(){}
 IdentifierExp::IdentifierExp(std::string n)
 {
@@ -34,9 +37,19 @@ IdentifierExp::IdentifierExp(std::string n)
     }else{
         name = n;
     }
+    tree.push_back(toString());
 }
 IdentifierExp::~IdentifierExp(){}
-CompoundExp::CompoundExp(std::string op,Expression *left,Expression *right):op(op),left(left),right(right){}
+CompoundExp::CompoundExp(std::string op,Expression *left,Expression *right):op(op),left(left),right(right)
+{
+    tree.push_back(op);
+    for(std::string &line:left->tree){
+        tree.push_back(pad+line);
+    }
+    for(std::string &line:right->tree){
+        tree.push_back(pad+line);
+    }
+}
 CompoundExp::~CompoundExp()
 {
     delete left;
@@ -120,41 +133,41 @@ Expression* CompoundExp::getRight()const
     return right;
 }
 
-std::vector<std::string> SZYExp::createLevel(Expression* exp)
-{
-    std::vector<std::string> level;
-    std::queue<Expression*> q;
-    q.push(exp);
-    q.push(nullptr);
-    Expression *tmp;
-    while(!q.empty()){
-        tmp = q.front();
-        q.pop();
-        if(!tmp){
-            level.push_back("");
-            if(!q.front()){
-                break;
-            }
-            q.push(nullptr);
-        }else{
-            switch (tmp->type()) {
-            case CONSTANT:
-                level.push_back(tmp->toString());
-                break;
-            case IDENTIFIER:
-                level.push_back(tmp->toString());
-                break;
-            case COMPOUND:
-                level.push_back(tmp->getOperator());
-                if(tmp->getLeft()){
-                    q.push(tmp->getLeft());
-                }
-                if(tmp->getRight()){
-                    q.push(tmp->getRight());
-                }
-                break;
-            }
-        }
-    }
-    return level;
-}
+//std::vector<std::string> SZYExp::createLevel(Expression* exp)
+//{
+//    std::vector<std::string> level;
+//    std::queue<Expression*> q;
+//    q.push(exp);
+//    q.push(nullptr);
+//    Expression *tmp;
+//    while(!q.empty()){
+//        tmp = q.front();
+//        q.pop();
+//        if(!tmp){
+//            level.push_back("");
+//            if(!q.front()){
+//                break;
+//            }
+//            q.push(nullptr);
+//        }else{
+//            switch (tmp->type()) {
+//            case CONSTANT:
+//                level.push_back(tmp->toString());
+//                break;
+//            case IDENTIFIER:
+//                level.push_back(tmp->toString());
+//                break;
+//            case COMPOUND:
+//                level.push_back(tmp->getOperator());
+//                if(tmp->getLeft()){
+//                    q.push(tmp->getLeft());
+//                }
+//                if(tmp->getRight()){
+//                    q.push(tmp->getRight());
+//                }
+//                break;
+//            }
+//        }
+//    }
+//    return level;
+//}

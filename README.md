@@ -1,9 +1,5 @@
 # QBasic
 
-### 待完成
-
-- tokenizer和parser存在的环境问题
-
 ### basic语言
 
 - LET

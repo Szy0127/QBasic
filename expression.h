@@ -8,15 +8,16 @@
 
 namespace  SZYExp{
 static std::set<std::string> banned = {"IF","END","REM","THEN","GOTO","LET","PRINT","INPUT"};
-
+static const std::string pad = "    ";
 enum ExpressionType { CONSTANT, IDENTIFIER, COMPOUND };
-class Expression;
-std::vector<std::string> createLevel(Expression* exp); //根据exp树构造层次遍历的结果 每层用空字符串隔开
+//class Expression;
+//std::vector<std::string> createLevel(Expression* exp); //根据exp树构造层次遍历的结果 每层用空字符串隔开
 
 class Expression
 {
 public:
     Expression();
+    std::vector<std::string> tree;
     virtual ~Expression()=0;
     virtual int eval(Evalstate *state) = 0;
     virtual std::string toString()const = 0;

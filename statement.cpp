@@ -2,7 +2,7 @@
 #include <queue>
 
 using SZYExp::Expression;
-const std::string Statement::pad4 = "    ";
+using SZYExp::pad;
 std::string Statement::itos(int n)
 {
     std::stringstream ss;
@@ -27,7 +27,7 @@ Statement::~Statement(){}
 
 LETsta::LETsta(std::string var,Expression *exp):var(var),exp(exp)
 {
-    level = createLevel(exp);
+    //level = createLevel(exp);
     createTree();
 }
 LETsta::~LETsta()
@@ -56,7 +56,7 @@ void GOTOsta::exec(Evalstate *state)
 
 PRINTsta::PRINTsta(Expression *exp):exp(exp)
 {
-    level = createLevel(exp);
+    //level = createLevel(exp);
     createTree();
 }
 PRINTsta::~PRINTsta()
@@ -77,8 +77,8 @@ void PRINTsta::exec(Evalstate *state)
 
 IFsta::IFsta(std::string op,Expression *l,Expression *r,int n):op(op),left(l),right(r),lineNumber(n)
 {
-    levelLeft = createLevel(left);
-    levelRight = createLevel(right);
+    //levelLeft = createLevel(left);
+    //levelRight = createLevel(right);
     createTree();
 }
 
@@ -143,31 +143,36 @@ INPUTsta::~INPUTsta(){}
 void INPUTsta::createTree()
 {
     tree.push_back("INPUT");
-    tree.push_back(pad4+name);
+    tree.push_back(pad+name);
 }
 void LETsta::createTree()
 {
     tree.push_back("LET = ");
-    level.insert(level.begin(),var);
-    std::string pad = pad4;
-    for(auto &s:level){
-        if(s.empty()){
-            pad += pad4;
-        }else{
-            tree.push_back(pad+s);
-        }
+//    level.insert(level.begin(),var);
+//    for(auto &s:level){
+//        if(s.empty()){
+//            pad += pad;
+//        }else{
+//            tree.push_back(pad+s);
+//        }
+//    }
+    tree.push_back(pad+var);
+    for(std::string &line:exp->tree){
+        tree.push_back(pad+line);
     }
 }
 void PRINTsta::createTree()
 {
     tree.push_back("PRINT");
-    std::string pad = pad4;
-    for(auto &s:level){
-        if(s.empty()){
-            pad += pad4;
-        }else{
-            tree.push_back(pad+s);
-        }
+//    for(auto &s:level){
+//        if(s.empty()){
+//            pad += pad;
+//        }else{
+//            tree.push_back(pad+s);
+//        }
+//    }
+    for(std::string &line:exp->tree){
+        tree.push_back(pad+line);
     }
 }
 
@@ -180,7 +185,7 @@ void REMsta::createTree()
 void GOTOsta::createTree()
 {
     tree.push_back("GOTO");
-    tree.push_back(pad4 + itos(lineNumber));
+    tree.push_back(pad + itos(lineNumber));
 }
 void ENDsta::createTree()
 {
@@ -189,33 +194,42 @@ void ENDsta::createTree()
 void IFsta::createTree()
 {
     tree.push_back("IF THEN");
-    std::vector<std::string> level;
-    int lengthl = levelLeft.size();
-    int lengthr = levelRight.size();
-    int l = 0;
-    int r = 0;
-    while(l < lengthl || r < lengthr){
-        while(l < lengthl && !levelLeft[l].empty()){
-            level.push_back(levelLeft[l]);
-            l++;
-        }
-        while(r < lengthr && !levelRight[r].empty()){
-            level.push_back(levelRight[r]);
-            r++;
-        }
-        level.push_back("");
-        l++;
-        r++;
+//    std::vector<std::string> level;
+//    int lengthl = levelLeft.size();
+//    int lengthr = levelRight.size();
+//    int l = 0;
+//    int r = 0;
+//    while(l < lengthl || r < lengthr){
+//        while(l < lengthl && !levelLeft[l].empty()){
+//            level.push_back(levelLeft[l]);
+//            l++;
+//        }
+//        while(r < lengthr && !levelRight[r].empty()){
+//            level.push_back(levelRight[r]);
+//            r++;
+//        }
+//        level.push_back("");
+//        l++;
+//        r++;
+//    }
+//    level.insert(level.begin()+1,op);
+//    level.insert(level.begin()+3,itos(lineNumber));
+//    std::string pad = pad4;
+//    for(auto &s:level){
+//        if(s.empty()){
+//            pad += pad4;
+//        }else{
+//            tree.push_back(pad+s);
+//        }
+//    }
+    for(std::string &line:left->tree){
+        tree.push_back(pad+line);
     }
-    level.insert(level.begin()+1,op);
-    level.insert(level.begin()+3,itos(lineNumber));
-    std::string pad = pad4;
-    for(auto &s:level){
-        if(s.empty()){
-            pad += pad4;
-        }else{
-            tree.push_back(pad+s);
-        }
+    tree.push_back(pad+op);
+    for(std::string &line:right->tree){
+        tree.push_back(pad+line);
     }
+    tree.push_back(pad+itos(lineNumber));
+
 
 }

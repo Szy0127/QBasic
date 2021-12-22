@@ -29,7 +29,6 @@ class Statement
     //所有statement都必须生成语法树 所以tree和getTree设置为基类的成员
     //每个statement的语法树格式不一样 createTree设置为纯虚函数
 protected:
-    static const std::string pad4;
     static std::string itos(int n);
     Tree tree;//语法树
 public:
@@ -53,7 +52,7 @@ class LETsta:public Statement
 private:
     std::string var;
     SZYExp::Expression *exp;
-    std::vector<std::string> level;//exp层次遍历的结果
+    //std::vector<std::string> level;//exp层次遍历的结果
 
     virtual void createTree()override;
 public:
@@ -68,7 +67,7 @@ class PRINTsta:public Statement
 {
 private:
     SZYExp::Expression *exp;
-    std::vector<std::string> level;
+    //std::vector<std::string> level;
     virtual void createTree()override;
 public:
     PRINTsta(SZYExp::Expression *exp);
@@ -98,8 +97,8 @@ private:
     SZYExp::Expression *left;
     SZYExp::Expression *right;
     int lineNumber;
-    std::vector<std::string> levelLeft;
-    std::vector<std::string> levelRight;
+    //std::vector<std::string> levelLeft;
+    //std::vector<std::string> levelRight;
     virtual void createTree()override;
 public:
     IFsta(std::string op,SZYExp::Expression *l,SZYExp::Expression *r,int n);
