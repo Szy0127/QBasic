@@ -61,10 +61,11 @@ void Evalstate::startInput(std::string name)
 }
 void Evalstate::finishInput(int value,bool valid)
 {
-    inputVar.clear();
     if(!valid){
+        inputVar.clear();
         return;
     }
     name2value[inputVar] = value;
+    inputVar.clear();
     output.push_back(">>" + std::to_string(value));
 }
