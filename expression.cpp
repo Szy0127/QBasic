@@ -43,12 +43,18 @@ IdentifierExp::~IdentifierExp(){}
 CompoundExp::CompoundExp(std::string op,Expression *left,Expression *right):op(op),left(left),right(right)
 {
     tree.push_back(op);
-    for(std::string &line:left->tree){
-        tree.push_back(pad+line);
+    if(left){//-表示负号的时候没有左子树
+        for(std::string &line:left->tree){
+            tree.push_back(pad+line);
+        }
     }
-    for(std::string &line:right->tree){
-        tree.push_back(pad+line);
+
+    if(right){//实际上一定有右子树
+        for(std::string &line:right->tree){
+            tree.push_back(pad+line);
+        }
     }
+
 }
 CompoundExp::~CompoundExp()
 {

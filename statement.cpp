@@ -127,7 +127,7 @@ REMsta::~REMsta(){}
 void REMsta::exec(Evalstate *state)
 {
     state->setNext();
-    state->print("#"+content);
+    //state->print("#"+content);
 }
 INPUTsta::INPUTsta(std::string name):name(name)
 {

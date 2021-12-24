@@ -86,7 +86,7 @@ void MainWindow::LOAD()
         return;
     }
 
-    //QString filePath = QString::fromStdString("errorTest.txt");
+    //QString filePath = QString::fromStdString("../testcases/1.txt");
     CLEAR();
     program.reset(new SZYQBasic::Program(filePath.toStdString()));
     showCode();
