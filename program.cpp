@@ -214,8 +214,12 @@ void Program::getStatements()
         try {
             Statement *sta = getOneStatements(line);
             statements[num] = sta;
+            tree[num] = sta->getTree();
         } catch (Myexception &e) {
+            //这里看上去error没有必要 但是error是为了分开statement和error的语法树部分
+            //tree综合了两种 实际上error可以删去
             error[num] = e.what();
+            tree[num] = std::vector<std::string>{error[num]};
         }
     }
 }

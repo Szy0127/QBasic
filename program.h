@@ -9,6 +9,7 @@
 #include<parser.h>
 namespace SZYQBasic{
 typedef std::vector<std::string> Token ;
+typedef std::vector<std::string> Tree;
 static std::set<std::string> validCommand{"LET","IF","REM","END","GOTO","PRINT","INPUT"};
 static std::set<std::string> validCompareOperators{"=","<",">"};
 class Program
@@ -35,7 +36,8 @@ public:
     std::map<int,std::string> rawCommands; // 除了行号 都不处理 方便gui打印
     std::map<int,Token> commands;  //每一行string转为若干个token构成的vector 包括行数 指令 标识符 操作符 常数
     std::map<int,Statement*> statements; // 行号对应的代码
-    std::map<int,std::string> error;
+    std::map<int,std::string> error; //错误的行号对应的错误信息
+    std::map<int, Tree> tree; // 每个行号对应的语法树
 
     void getTokens();
     void getStatements();

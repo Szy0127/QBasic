@@ -134,21 +134,31 @@ void MainWindow::showOutput()
 }
 
 void MainWindow::showTree(){
-    bool first;
-    for(auto &sta:program->statements){
+    bool first;//每个语法树的第一行要多加一个行号
+//    for(auto &sta:program->statements){
+//        first = true;
+//        //ui->treeDisplay->append(QString::number(sta.first));
+//        for(auto &line:sta.second->getTree()){
+//            if(first){
+//                ui->treeDisplay->append(QString::number(sta.first) + " "+QString::fromStdString(line));
+//                first = false;
+//            }else{
+//                ui->treeDisplay->append(QString::fromStdString(line));
+//            }
+//        }
+//    }
+//    for(auto &err:program->error){
+//        ui->treeDisplay->append(QString::number(err.first) + " "+QString::fromStdString(err.second));
+//    }
+    for(auto &t:program->tree){
         first = true;
-        //ui->treeDisplay->append(QString::number(sta.first));
-        for(auto &line:sta.second->getTree()){
+        for(auto &line:t.second){
             if(first){
-                ui->treeDisplay->append(QString::number(sta.first) + " "+QString::fromStdString(line));
+                ui->treeDisplay->append(QString::number(t.first)+" "+QString::fromStdString(line));
                 first = false;
             }else{
                 ui->treeDisplay->append(QString::fromStdString(line));
             }
         }
     }
-    for(auto &err:program->error){
-        ui->treeDisplay->append(QString::number(err.first) + " "+QString::fromStdString(err.second));
-    }
-
 }
