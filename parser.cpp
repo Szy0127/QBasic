@@ -1,22 +1,9 @@
 #include "parser.h"
 #include "myexception.h"
 #include <sstream>
+using namespace SZYExp;
 Parser::Parser()
 {
-    validOperators.insert("+");
-    validOperators.insert("-");
-    validOperators.insert("*");
-    validOperators.insert("/");
-    validOperators.insert("**");
-    validOperators.insert("(");
-    validOperators.insert(")");
-
-    precedence["("] = 0;
-    precedence["+"] = 2;
-    precedence["-"] = 2;
-    precedence["*"] = 3;
-    precedence["/"] = 3;
-    precedence["**"] = 4;
 }
 Parser::~Parser(){}
 void Parser::merge()

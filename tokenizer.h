@@ -10,6 +10,8 @@ class Tokenizer
 private:
     Token tokens;
     bool isDigit(char c)const;
+    std::string char2string(char c);//一个个处理字符 但是token是字符串的形式
+    std::string char2string(char c1,char c2);
 public:
     Tokenizer();
     ~Tokenizer();

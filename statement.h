@@ -19,9 +19,6 @@ enum StatementType{LET,IF,PRINT,INPUT,GOTO,END,REM};
  * REM 直接返回
  * END 结束
  *
- *
- *
- *
  */
 
 class Statement

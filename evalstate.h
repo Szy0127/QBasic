@@ -6,6 +6,10 @@
 #include<vector>
 class Evalstate
 {
+    //每个statement 从evalstate中获取信息 更改信息 输出信息 更改执行流
+
+public:
+    enum{end=-2,next};//下一个语句的行号标记
 public:
     Evalstate();
     ~Evalstate();

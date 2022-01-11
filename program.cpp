@@ -21,16 +21,16 @@ Program::Program(std::string fileName)
         getline(ss,s);
         appendCMD(n,s);
     }
-    init();
+    initTools();
     rip = statements.end();
 
 }
 Program::Program()
 {
-    init();
+    initTools();
     rip = statements.end();
 }
-void Program::init()
+void Program::initTools()
 {
     tokenizer = new Tokenizer;
     parser = new Parser;
@@ -66,6 +66,9 @@ Statement *Program::getOneStatements(Token token)
     //但是这里单独一个函数的话 其实if return就可以了
     int hashKey = hash(token.at(0));
     switch (hashKey) {
+
+    //这里对于每个statement 是根据不同的语法规则设计的  例如根据等号分开
+    //对于正常的语句没有问题 但是对于错误语句可能会进行错误的判断 但反正都是错的  无所谓
     case LET:{
         try {
             token.at(3);//为了触发exception
@@ -214,13 +217,19 @@ void Program::getStatements()
         try {
             Statement *sta = getOneStatements(line);
             statements[num] = sta;
-            tree[num] = sta->getTree();
         } catch (Myexception &e) {
-            //这里看上去error没有必要 但是error是为了分开statement和error的语法树部分
-            //tree综合了两种 实际上error可以删去
             error[num] = e.what();
-            tree[num] = std::vector<std::string>{error[num]};
         }
+    }
+}
+
+void Program::getTree()
+{
+    for(auto &sta:statements){
+        tree[sta.first] = sta.second->getTree();
+    }
+    for(auto &err:error){
+        tree[err.first] = std::vector<std::string>{err.second};
     }
 }
 void Program::removeCmd(int n)
@@ -257,6 +266,7 @@ void Program::exec()
 {
     getTokens();
     getStatements();
+    getTree();
     evalstate->reset();//run之前会清空所有的变量 包括输出
     rip = statements.begin();
     _exec();
@@ -274,10 +284,10 @@ void Program::_exec()
         }
         next = evalstate->getNextLineNumber();
         switch (next) {
-        case -2:
+        case Evalstate::end:
             rip = statements.end();
             break;
-        case -1:
+        case Evalstate::next:
             rip++;
             break;
         default:
@@ -295,6 +305,7 @@ void Program::_exec()
 }
 void Program::continueExec(std::string n)
 {
+    //input后 控制台返回用户输入 结束input  根据是否是整型判断输入合法与否 但是都需要接着执行
     try {
         int value = stoi(n);
         if(value == 0 && n[0] != 0){

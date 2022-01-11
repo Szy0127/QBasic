@@ -7,6 +7,21 @@
 #include <set>
 
 namespace  SZYExp{
+
+//优先级和合法操作符是属于exp的一部分 但实际上在parser中用到
+static std::map<std::string,int> precedence = {
+    {"(" , 0},
+    {"+" , 2},
+    {"-" , 2},
+    {"*" , 3},
+    {"/" , 3},
+    {"**" , 4},
+
+};
+static std::set<std::string> validOperators = {
+    "+","-","*","/","**","(",")"
+};
+
 static std::set<std::string> banned = {"IF","END","REM","THEN","GOTO","LET","PRINT","INPUT"};
 static const std::string pad = "    ";
 enum ExpressionType { CONSTANT, IDENTIFIER, COMPOUND };

@@ -8,6 +8,15 @@ Tokenizer::Tokenizer()
 }
 Tokenizer::~Tokenizer(){}
 
+std::string Tokenizer::char2string(char c)
+{
+    return std::string(1,c);
+}
+
+std::string Tokenizer::char2string(char c1,char c2)
+{
+    return std::string(1,c1) + std::string(1,c2);
+}
 Token Tokenizer::string2tokens(std::string cmd)
 {
     tokens.clear();
@@ -15,25 +24,27 @@ Token Tokenizer::string2tokens(std::string cmd)
     std::string block;
     std::string buf;
     bool constant = false;
+
     while(s>>block){
+        //先用空格分开
         buf.clear();
         for(size_t i = 0 ; i < block.length();i++){
             // **需要特殊对待
-            if(i+1 < block.length() && operators.count(std::string(1,block[i])+std::string(1,block[i+1]))){
+            if(i+1 < block.length() && operators.count(char2string(block[i],block[i+1]))){
                 if(!buf.empty()){
                     tokens.push_back(buf);
                     buf.clear();
                 }
-                tokens.push_back(std::string(1,block[i])+std::string(1,block[i+1]));
+                tokens.push_back(char2string(block[i],block[i+1]));
                 i++;
                 continue;
             }
-            if(operators.count(std::string(1,block[i]))){
+            if(operators.count(char2string(block[i]))){
                 if(!buf.empty()){
                     tokens.push_back(buf);
                     buf.clear();
                 }
-                tokens.push_back(std::string(1,block[i]));
+                tokens.push_back(char2string(block[i]));
                 continue;
             }
             //不是操作符只能是操作数 根据当前状态连接
@@ -46,7 +57,7 @@ Token Tokenizer::string2tokens(std::string cmd)
                 if(isDigit(block[i])){
                     buf.push_back(block[i]);
                 }else{
-                    throw IdentifierError(std::string(1,buf.back())+std::string(1,block[i]));
+                    throw IdentifierError(char2string(buf.back(),block[i]));
                 }
             }else{
                 buf.push_back(block[i]);

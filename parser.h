@@ -17,10 +17,10 @@ public:
 
 private:
     void merge();
-    std::map<std::string,int> precedence;
+
     bool isConstant(std::string s)const;
     int getConstant(std::string s);
-    std::set<std::string> validOperators;
+
     std::stack<std::string> operators;//操作符 优先级严格递增的单调栈
     std::stack<Expression*> operands;//操作数 每次取两个
 
