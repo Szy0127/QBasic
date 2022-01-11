@@ -30,18 +30,19 @@ int Evalstate::getNextLineNumber()const
 }
 void Evalstate::setNext()
 {
-    number = -1;
+    number = next;
 }
 void Evalstate::setEnd()
 {
-    number = -2;
+    number = end;
 }
 
 void Evalstate::reset()
 {
-    number = -1;
+    number = next;
     name2value.clear();
     output.clear();
+    inputVar.clear();
 }
 void Evalstate::print(std::string s)
 {
