@@ -46,6 +46,7 @@ Program::~Program()
 void Program::getTokens()
 {
     commands.clear();
+    error.clear();
     for(auto &cmd:rawCommands){
         try {
             commands[cmd.first]= tokenizer->string2tokens(cmd.second);
@@ -225,6 +226,7 @@ void Program::getStatements()
 
 void Program::getTree()
 {
+    tree.clear();
     for(auto &sta:statements){
         tree[sta.first] = sta.second->getTree();
     }
